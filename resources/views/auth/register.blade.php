@@ -159,27 +159,36 @@
 <p class="font-body-md text-body-md text-on-surface-variant">Create an account to manage your medical orders and supply chain.</p>
 </div>
 <!-- Registration Form -->
-<form class="space-y-sm" id="registrationForm" onsubmit="event.preventDefault();">
+@if ($errors->any())
+    <div class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm font-semibold">
+        @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    </div>
+@endif
+
+<form class="space-y-sm" id="registrationForm" method="POST" action="{{ route('register') }}">
+@csrf
 <!-- Full Name -->
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base" for="fullName">Full Name</label>
-<input class="w-full px-md py-3 rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md text-on-surface" id="fullName" placeholder="Jane Doe" type="text"/>
+<input class="w-full px-md py-3 rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md text-on-surface" id="fullName" name="name" value="{{ old('name') }}" placeholder="Jane Doe" type="text" required/>
 </div>
 <!-- Email Address -->
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base" for="email">Email Address</label>
-<input class="w-full px-md py-3 rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md text-on-surface" id="email" placeholder="jane@company.com" type="email"/>
+<input class="w-full px-md py-3 rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md text-on-surface" id="email" name="email" value="{{ old('email') }}" placeholder="jane@company.com" type="email" required/>
 </div>
 <!-- Phone Number -->
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base" for="phone">Phone Number</label>
-<input class="w-full px-md py-3 rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md text-on-surface" id="phone" placeholder="+62 (555) 000-0000" type="tel"/>
+<input class="w-full px-md py-3 rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md text-on-surface" id="phone" name="phone" value="{{ old('phone') }}" placeholder="+62 (555) 000-0000" type="tel" required/>
 </div>
 <!-- Password -->
 <div>
 <label class="block font-label-md text-label-md text-on-surface mb-base" for="password">Password</label>
 <div class="relative">
-<input class="w-full px-md py-3 rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md text-on-surface" id="password" onkeyup="checkPasswordStrength(this.value)" placeholder="••••••••" type="password"/>
+<input class="w-full px-md py-3 rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md text-on-surface" id="password" name="password" onkeyup="checkPasswordStrength(this.value)" placeholder="••••••••" type="password" required/>
 <button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors" type="button">
 <span class="material-symbols-outlined">visibility</span>
 </button>
@@ -195,7 +204,7 @@
 </div>
 <!-- Terms Checkbox -->
 <div class="flex items-start gap-3 py-xs">
-<input class="mt-1 w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox"/>
+<input class="mt-1 w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox" required/>
 <label class="font-body-md text-body-md text-on-surface-variant" for="terms">
                             I agree to the <a class="text-primary hover:underline font-semibold" href="#">Terms of Service</a> and <a class="text-primary hover:underline font-semibold" href="#">Privacy Policy</a>.
                         </label>
@@ -233,13 +242,13 @@
 </div>
 <!-- Log In Link -->
 <p class="mt-xl text-center font-body-md text-body-md text-on-surface-variant">
-                    Already have an account? <a class="text-primary font-bold hover:underline" href="#">Log In</a>
+                    Already have an account? <a class="text-primary font-bold hover:underline" href="/login">Log In</a>
 </p>
 </div>
 </section>
 </main>
 <!-- Footer Meta -->
-<footer class="w-full py-md px-margin-desktop bg-surface-container-low border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-4">
+<footer class="w-full py-md px-margin-mobile md:px-margin-desktop bg-surface-container-low border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-4">
 <p class="font-caption text-caption text-on-surface-variant">© 2024 PT Yakin Tri Medika. All rights reserved.</p>
 <div class="flex gap-md">
 <a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>

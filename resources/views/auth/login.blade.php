@@ -160,12 +160,26 @@
 <p class="font-body-md text-body-md text-on-surface-variant">Sign in to your PT Yakin Tri Medika account</p>
 </div>
 <!-- Login Form -->
-<form class="space-y-md" onsubmit="event.preventDefault();">
+@if ($errors->any())
+    <div class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm font-semibold">
+        @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    </div>
+@endif
+@if (session('error'))
+    <div class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm font-semibold">
+        {{ session('error') }}
+    </div>
+@endif
+
+<form class="space-y-md" method="POST" action="{{ route('login') }}">
+@csrf
 <div class="space-y-xs">
 <label class="font-label-md text-label-md text-on-surface block" for="email">Email Address</label>
 <div class="relative input-focus border border-outline-variant rounded-lg bg-white overflow-hidden transition-all duration-200">
 <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-body-md">mail</span>
-<input class="w-full pl-11 pr-sm py-3 border-none focus:ring-0 text-body-md font-body-md placeholder:text-outline-variant" id="email" placeholder="e.g. employee@yakintrimedika.com" type="email"/>
+<input class="w-full pl-11 pr-sm py-3 border-none focus:ring-0 text-body-md font-body-md placeholder:text-outline-variant" id="email" name="email" value="{{ old('email') }}" placeholder="e.g. employee@yakintrimedika.com" type="email" required/>
 </div>
 </div>
 <div class="space-y-xs">
@@ -175,14 +189,14 @@
 </div>
 <div class="relative input-focus border border-outline-variant rounded-lg bg-white overflow-hidden transition-all duration-200">
 <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-body-md">lock</span>
-<input class="w-full pl-11 pr-11 py-3 border-none focus:ring-0 text-body-md font-body-md placeholder:text-outline-variant" id="password" placeholder="••••••••" type="password"/>
+<input class="w-full pl-11 pr-11 py-3 border-none focus:ring-0 text-body-md font-body-md placeholder:text-outline-variant" id="password" name="password" placeholder="••••••••" type="password" required/>
 <button class="absolute right-sm top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-ytm-teal transition-colors" type="button">
 <span class="material-symbols-outlined text-body-md">visibility</span>
 </button>
 </div>
 </div>
 <div class="flex items-center gap-xs pt-base">
-<input class="w-4 h-4 rounded border-outline-variant text-ytm-teal focus:ring-ytm-teal" id="remember" type="checkbox"/>
+<input class="w-4 h-4 rounded border-outline-variant text-ytm-teal focus:ring-ytm-teal" id="remember" name="remember" type="checkbox"/>
 <label class="font-body-md text-body-md text-on-surface-variant cursor-pointer" for="remember">Remember me for 30 days</label>
 </div>
 <button class="coral-btn w-full py-3.5 rounded-lg text-white font-label-md text-label-md mt-sm flex items-center justify-center gap-sm shadow-lg shadow-ytm-coral/20" type="submit">
@@ -211,7 +225,7 @@
 <div class="mt-xl text-center">
 <p class="font-body-md text-body-md text-on-surface-variant">
                             New to PT Yakin Tri Medika? 
-                            <a class="text-ytm-teal font-label-md hover:underline" href="#">Create an Account</a>
+                            <a class="text-ytm-teal font-label-md hover:underline" href="/register">Create an Account</a>
 </p>
 </div>
 </div>

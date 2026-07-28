@@ -154,125 +154,125 @@
 
 <body
     class="bg-surface font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container">
-    <!-- TopNavBar Shell -->
-    @if (!isset($session->user->role))
-        <header
-            class="sticky top-0 w-full z-50 flex flex-col items-center bg-surface-container-lowest px-margin-mobile md:px-margin-desktop border-b border-outline-variant shadow-sm">
-            <div class="max-w-[1280px] w-full h-16 flex items-center justify-between gap-gutter">
-                <!-- Brand Logo -->
-                <div class="flex items-center gap-xs shrink-0">
-                    <a href="/">
-                        <img alt="Yakin Tri Medika Logo" class="h-10 w-auto" src="/img/ytm.jpeg" />
+    <!-- TopNavBar Shell (Modern Glassmorphism) -->
+    <header class="sticky top-0 w-full z-50 flex flex-col items-center bg-white/80 backdrop-blur-md px-margin-mobile md:px-margin-desktop border-b border-outline-variant/30 shadow-sm">
+        <div class="max-w-[1280px] w-full h-16 flex items-center justify-between gap-gutter">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-xs shrink-0 hover:scale-[1.02] transition-transform duration-200">
+                <a href="/">
+                    <img alt="Yakin Tri Medika Logo" class="h-10 w-auto object-contain" src="{{ \App\Models\Setting::getValue('logo', '/img/ytm.jpeg') }}" />
+                </a>
+            </div>
+            
+            <!-- Category Links (Modern Pills) -->
+            <nav class="hidden lg:flex items-center gap-xs">
+                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ !request('category') || request('category') == 'all' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'all']) }}">All</a>
+                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'cats' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'cats']) }}">Cats &amp; Dogs</a>
+                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'livestock' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'livestock']) }}">Livestock</a>
+                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'poultry' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'poultry']) }}">Poultry</a>
+                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'birds' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'birds']) }}">Birds</a>
+                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'aqua' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'aqua']) }}">Aqua</a>
+            </nav>
+
+            <!-- Actions & Auth -->
+            <div class="flex items-center gap-sm">
+                <!-- Cart Widget -->
+                <div class="relative me-1">
+                    <a href="{{ route('cart.index') }}" class="relative p-2.5 text-outline hover:text-primary hover:bg-surface-container-low rounded-full flex items-center justify-center transition-all" style="font-size: 24px;">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span class="absolute top-0 right-0 bg-secondary text-white text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold border-2 border-white shadow-sm">
+                            {{ session('cart') ? array_sum(session('cart')) : 0 }}
+                        </span>
                     </a>
                 </div>
-                <!-- Category Links -->
-                <nav class="hidden lg:flex items-center gap-md">
-                    <a class="text-primary border-b-2 border-primary pb-1 font-label-md text-label-md transition-all duration-200"
-                        href="#">All</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200"
-                        href="#">Cats</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200"
-                        href="#">Livestock</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200"
-                        href="#">Poultry</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200"
-                        href="#">Birds</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200"
-                        href="#">Aqua</a>
-                </nav>
-                <!-- Desktop Search (On Left variant handled via layout) -->
-                <div
-                    class="hidden md:flex flex-1 max-w-md items-center bg-surface-container-low rounded-full px-sm py-1.5 border border-outline-variant">
-                    <span class="material-symbols-outlined text-outline">search</span>
-                    <input class="bg-transparent border-none focus:ring-0 text-body-md w-full ml-xs"
-                        placeholder="Search medication, brands..." type="text" />
-                </div>
-                <!-- Actions -->
-                <div class="flex items-center gap-sm">
-                    <button
-                        class="material-symbols-outlined text-outline hover:text-primary transition-colors">upload_file</button>
-                    <button
-                        class="material-symbols-outlined text-outline hover:text-primary transition-colors">chat</button>
-                    <div class="relative">
-                        <button
-                            class="material-symbols-outlined text-outline hover:text-primary transition-colors">shopping_cart</button>
-                        <span
-                            class="absolute -top-1 -right-1 bg-secondary-container text-on-secondary-container text-[10px] px-1 rounded-full font-bold">2</span>
-                    </div>
-                    <div
-                        class="h-8 w-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline-variant">
-                        <span class="material-symbols-outlined text-outline">person</span>
-                    </div>
-                </div>
-            </div>
-        </header>
-    @else
-        <header
-            class="sticky top-0 w-full z-50 flex flex-col items-center bg-surface-container-lowest shadow-sm border-b border-outline-variant">
-            <div class="max-w-[1280px] w-full px-margin-mobile md:px-margin-desktop py-xs flex items-center gap-md">
-                <!-- Brand Logo -->
-                <a class="flex-shrink-0" href="/">
-                    <img alt="PT Yakin Tri Medika Logo" class="h-10 md:h-12 w-auto object-contain"
-                        src="/img/ytm.jpeg" />
-                </a>
-                <button
-                    class="hidden lg:flex items-center gap-xs font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">
-                    Kategori
-                </button>
-                <!-- Search Bar (on_left configuration) -->
-                <div class="flex-grow max-w-2xl relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="material-symbols-outlined text-outline">search</span>
-                    </div>
-                    <input
-                        class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-all"
-                        placeholder="Cari di Yakin Tri Medika" type="text" />
-                </div>
-                <!-- Trailing Actions -->
-                <div class="flex items-center gap-sm md:gap-md">
-                    <button
-                        class="relative p-2 text-on-surface-variant hover:text-primary transition-all active:scale-95">
-                        <span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
-                        <span
-                            class="absolute top-1 right-1 bg-secondary text-white text-[10px] px-1 rounded-full">3</span>
-                    </button>
-                    <button
-                        class="relative p-2 text-on-surface-variant hover:text-primary transition-all active:scale-95">
-                        <span class="material-symbols-outlined" data-icon="chat">chat</span>
-                    </button>
-                    <div class="h-8 w-px bg-outline-variant hidden md:block"></div>
-                    <button
-                        class="hidden md:flex items-center gap-2 px-4 py-1.5 border border-primary text-primary rounded-lg font-label-md text-label-md hover:bg-primary-container hover:text-on-primary-container transition-all">
+
+                @if (!Auth::check())
+                    <!-- Guest Actions -->
+                    <a href="{{ route('login') }}" class="px-4 py-1.5 border border-primary text-primary rounded-full font-label-md text-label-md hover:bg-primary/5 transition-all">
                         Masuk
-                    </button>
-                    <button
-                        class="hidden md:block px-4 py-1.5 bg-primary text-white rounded-lg font-label-md text-label-md hover:opacity-90 shadow-sm transition-all active:scale-95">
+                    </a>
+                    <a href="{{ route('register') }}" class="px-4 py-1.5 bg-primary text-white rounded-full font-label-md text-label-md hover:opacity-90 shadow-sm transition-all active:scale-95">
                         Daftar
-                    </button>
-                    <button class="p-2 text-on-surface-variant md:hidden">
-                        <span class="material-symbols-outlined" data-icon="person">person</span>
-                    </button>
-                </div>
+                    </a>
+                @else
+                    <!-- Authenticated User Profile Pill Dropdown -->
+                    <div class="relative">
+                        <button type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-outline-variant hover:bg-surface-container-low transition-all focus:outline-none" id="profile-pill-trigger">
+                            @if(Auth::user()->profile_photo)
+                                <img src="{{ Auth::user()->profile_photo }}" alt="Avatar" class="w-6.5 h-6.5 rounded-full object-cover shadow-sm" />
+                            @else
+                                <div class="w-6.5 h-6.5 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </div>
+                            @endif
+                            <span class="text-body-md font-semibold text-on-surface hidden md:inline max-w-[120px] truncate">{{ Auth::user()->name }}</span>
+                            <span class="material-symbols-outlined text-[16px] text-outline">expand_more</span>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div class="absolute right-0 mt-2 w-48 bg-white border border-outline-variant rounded-xl shadow-lg py-2 hidden transition-all duration-200" id="profile-dropdown-menu" style="z-index: 100;">
+                            <div class="px-4 py-2 border-b border-outline-variant/40">
+                                <span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold block">Masuk Sebagai</span>
+                                <span class="font-bold text-sm text-on-surface truncate block" title="{{ Auth::user()->name }}">{{ Auth::user()->name }}</span>
+                            </div>
+                            
+                            @if (Auth::user()->role === 'admin')
+                                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-primary/5 transition-colors">
+                                    <span class="material-symbols-outlined text-[18px] text-primary">dashboard</span>
+                                    Panel Admin
+                                </a>
+                            @endif
+
+                            <a href="{{ route('profile.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-primary/5 transition-colors">
+                                <span class="material-symbols-outlined text-[18px] text-primary">person</span>
+                                Edit Profil
+                            </a>
+
+                            <a href="{{ route('transactions.history') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-primary/5 transition-colors">
+                                <span class="material-symbols-outlined text-[18px] text-primary">history</span>
+                                Riwayat Transaksi
+                            </a>
+
+                            <hr class="my-1 border-outline-variant/40" />
+
+                            <a href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center gap-2 px-4 py-2 text-sm text-danger hover:bg-danger/5 transition-colors">
+                                <span class="material-symbols-outlined text-[18px] text-danger">logout</span>
+                                Log Out
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                        @csrf
+                    </form>
+                @endif
             </div>
-            <!-- Navigation Links (Mobile/Desktop Sub-nav) -->
-            <div class="w-full bg-surface-container-lowest hidden md:flex justify-center py-2">
-                <nav class="max-w-[1280px] w-full px-margin-desktop flex gap-lg overflow-x-auto hide-scrollbar">
-                    <a class="text-primary border-b-2 border-primary pb-1 font-label-md text-label-md whitespace-nowrap"
-                        href="#">All</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors whitespace-nowrap"
-                        href="#">Cats</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors whitespace-nowrap"
-                        href="#">Livestock</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors whitespace-nowrap"
-                        href="#">Poultry</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors whitespace-nowrap"
-                        href="#">Birds</a>
-                    <a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors whitespace-nowrap"
-                        href="#">Aqua</a>
-                </nav>
-            </div>
-        </header>
-    @endif
+        </div>
+
+        <!-- Subnav (Mobile) -->
+        <div class="w-full bg-surface-container-lowest lg:hidden flex justify-center py-2 border-t border-outline-variant/30">
+            <nav class="max-w-[1280px] w-full px-margin-mobile flex gap-xs overflow-x-auto hide-scrollbar scroll-smooth">
+                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ !request('category') || request('category') == 'all' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'all']) }}">All</a>
+                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'cats' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'cats']) }}">Cats &amp; Dogs</a>
+                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'livestock' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'livestock']) }}">Livestock</a>
+                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'poultry' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'poultry']) }}">Poultry</a>
+                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'birds' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'birds']) }}">Birds</a>
+                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'aqua' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
+                    href="{{ route('home', ['category' => 'aqua']) }}">Aqua</a>
+            </nav>
+        </div>
+    </header>
 
     @yield('content')
 
@@ -280,8 +280,8 @@
     <footer
         class="w-full py-lg px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter bg-surface-container-low border-t border-outline-variant">
         <div class="flex flex-col gap-sm">
-            <img alt="PT Yakin Tri Medika Logo" class="h-12 w-fit grayscale opacity-70 mb-2"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd7NndiBIc6SBrftqqwkJh6EsYWW02LqUcKyJTwIxtVz7g1KrOcNofRLf8KN2tY7JmUSdZ8141ROyXqANVl6mQZ-WPgdCH4NFrRRxkSr9Rh1vR1GNTawfqV3DuvNqdS_d7bQnnZUTVuG-FSygS2ztZyPUbSppgJ7RrjlodO8RorslP5jgKuKj1xheEM_CMdsH07e9H-syA8gfilvnSjSe7DXLXu0rJ0KRMO2u4PmTa0C9a6qckDVQEgHZdqwC8_T2OaTc" />
+            <img alt="PT Yakin Tri Medika Logo" class="h-12 w-fit grayscale opacity-70 mb-2 object-contain"
+                src="{{ \App\Models\Setting::getValue('logo', '/img/ytm.jpeg') }}" />
             <p class="text-caption font-caption text-on-surface-variant leading-relaxed">
                 PT Yakin Tri Medika adalah distributor resmi produk farmasi hewan dan peralatan medis terpercaya di
                 Indonesia sejak 2024.
@@ -348,12 +348,29 @@
     <script>
         // Simple search bar focus micro-interaction
         const searchInput = document.querySelector('input[type="text"]');
-        searchInput.addEventListener('focus', () => {
-            searchInput.parentElement.classList.add('scale-[1.01]');
-        });
-        searchInput.addEventListener('blur', () => {
-            searchInput.parentElement.classList.remove('scale-[1.01]');
-        });
+        if (searchInput) {
+            searchInput.addEventListener('focus', () => {
+                searchInput.parentElement.classList.add('scale-[1.01]');
+            });
+            searchInput.addEventListener('blur', () => {
+                searchInput.parentElement.classList.remove('scale-[1.01]');
+            });
+        }
+
+        // Profile dropdown menu toggle
+        const profileTrigger = document.getElementById('profile-pill-trigger');
+        const profileMenu = document.getElementById('profile-dropdown-menu');
+        if (profileTrigger && profileMenu) {
+            profileTrigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileMenu.classList.toggle('hidden');
+            });
+            document.addEventListener('click', function(e) {
+                if (!profileMenu.contains(e.target) && e.target !== profileTrigger) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+        }
     </script>
     @stack('script')
 </body>
