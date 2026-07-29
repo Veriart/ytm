@@ -1,111 +1,132 @@
 @extends('layout')
 
 @section('content')
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold mb-6">Keranjang Belanja</h1>
+    <main class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-8 space-y-6">
+        <h1 class="text-2xl font-extrabold text-slate-800">Keranjang Belanja</h1>
         
+        <!-- Alerts -->
         @if(session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-700 p-4 rounded-xl mb-6 text-sm font-semibold shadow-sm">
-                {{ session('success') }}
+            <div class="flex items-center gap-3 p-4 bg-emerald-50 text-emerald-800 rounded-xl border border-emerald-100 text-sm">
+                <span class="material-symbols-outlined text-[20px] text-emerald-600">check_circle</span>
+                <span class="font-semibold">{{ session('success') }}</span>
             </div>
         @endif
         @if(session('error'))
-            <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl mb-6 text-sm font-semibold shadow-sm">
-                {{ session('error') }}
+            <div class="flex items-center gap-3 p-4 bg-rose-50 text-rose-800 rounded-xl border border-rose-100 text-sm">
+                <span class="material-symbols-outlined text-[20px] text-rose-600">error</span>
+                <span class="font-semibold">{{ session('error') }}</span>
             </div>
         @endif
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- LEFT COLUMN: Cart Items -->
-            <section class="lg:col-span-2 space-y-4" data-purpose="cart-items-container">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- LEFT COLUMN: Cart Items (Col Span 8) -->
+            <section class="lg:col-span-8 space-y-4" data-purpose="cart-items-container">
                 <!-- Selection Controller -->
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <input checked="" id="selectAll" class="w-5 h-5 rounded text-primary focus:ring-primary" type="checkbox" />
-                        <label class="font-medium" for="selectAll" id="select-all-label">Pilih Semua ({{ count($cartItems) }})</label>
+                        <input checked id="selectAll" class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" type="checkbox" />
+                        <label class="font-bold text-slate-700 text-sm select-none cursor-pointer" for="selectAll" id="select-all-label">Pilih Semua ({{ count($cartItems) }})</label>
                     </div>
                 </div>
-                <!-- Store Header -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+
+                <!-- Store Items List -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-100">
                     @forelse($cartItems as $item)
                         <!-- Cart Item -->
-                        <article class="p-4 flex flex-col md:flex-row border-b border-gray-100 last:border-0" data-purpose="cart-item">
-                            <div class="flex items-start space-x-3">
-                                <input checked="" class="mt-2 w-5 h-5 rounded text-primary focus:ring-primary item-checkbox" type="checkbox" data-id="{{ $item['product']->id }}" />
-                                <div class="relative w-24 h-24 flex-shrink-0">
+                        <article class="p-5 flex flex-col sm:flex-row gap-4" data-purpose="cart-item">
+                            <div class="flex items-start gap-3">
+                                <input checked class="mt-2 w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary item-checkbox cursor-pointer" type="checkbox" data-id="{{ $item['product']->id }}" />
+                                
+                                <div class="relative w-20 h-20 flex-shrink-0 bg-slate-50 rounded-xl overflow-hidden border border-slate-100">
                                     @if(Str::startsWith($item['product']->image, 'http'))
-                                        <img alt="{{ $item['product']->name }}" class="w-full h-full object-cover rounded-lg border" src="{{ $item['product']->image }}" />
+                                        <img alt="{{ $item['product']->name }}" class="w-full h-full object-cover" src="{{ $item['product']->image }}" />
                                     @else
-                                        <img alt="{{ $item['product']->name }}" class="w-full h-full object-cover rounded-lg border" src="{{ asset($item['product']->image) }}" />
+                                        <img alt="{{ $item['product']->name }}" class="w-full h-full object-cover" src="{{ asset($item['product']->image) }}" />
                                     @endif
                                 </div>
                             </div>
-                            <div class="flex-1 mt-4 md:mt-0 md:ml-4">
-                                <div class="flex justify-between">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900 leading-tight">
-                                            <a href="{{ route('product.show', $item['product']->slug) }}" class="hover:text-primary transition-colors">
+
+                            <div class="flex-grow flex flex-col justify-between">
+                                <div class="flex justify-between items-start gap-4">
+                                    <div class="min-w-0">
+                                        <h3 class="font-bold text-slate-800 text-sm hover:text-primary transition-colors truncate">
+                                            <a href="{{ route('product.show', $item['product']->slug) }}">
                                                 {{ $item['product']->name }}
                                             </a>
                                         </h3>
-                                        <p class="text-sm text-gray-500 mt-1">Kategori: {{ $item['product']->category->name }}</p>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <span class="text-[10px] bg-slate-100 text-slate-500 font-bold px-2 py-0.5 rounded border border-slate-100 uppercase">
+                                                {{ $item['product']->category->name }}
+                                            </span>
+                                            @if($item['product']->target_animals)
+                                                <span class="text-[10px] text-slate-400 font-semibold">Spesies: {{ $item['product']->target_animals }}</span>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div class="text-right">
-                                        <span class="block font-bold text-lg item-price" data-price="{{ $item['product']->price }}">Rp{{ number_format($item['product']->price, 0, ',', '.') }}</span>
+                                    <div class="text-right whitespace-nowrap">
+                                        <span class="block font-extrabold text-base text-slate-800 item-price" data-price="{{ $item['product']->price }}">Rp {{ number_format($item['product']->price, 0, ',', '.') }}</span>
+                                        <span class="text-[10px] text-slate-400 mt-1 block">Stok: {{ $item['product']->stock }} unit</span>
                                     </div>
                                 </div>
-                                <!-- Item Actions -->
-                                <div class="flex items-center justify-end mt-4 space-x-4">
-                                    <!-- Delete Form -->
+
+                                <!-- Item Actions & Quantity Controls -->
+                                <div class="flex items-center justify-between mt-4">
+                                    <!-- Delete Item Button -->
                                     <form action="{{ route('cart.delete') }}" method="POST" class="inline">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $item['product']->id }}" />
-                                        <button type="submit" class="text-gray-400 hover:text-red-500 transition-colors">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                                                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                            </svg>
+                                        <button type="submit" class="text-slate-400 hover:text-rose-600 p-1.5 hover:bg-rose-50 rounded-xl transition-all" title="Hapus dari keranjang">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
                                         </button>
                                     </form>
                                     
-                                    <div class="flex items-center border rounded-lg h-8 px-2 space-x-4">
-                                        <button class="text-primary font-bold btn-qty" data-action="minus" data-id="{{ $item['product']->id }}">-</button>
-                                        <span class="text-sm font-medium w-4 text-center qty-val" data-id="{{ $item['product']->id }}">{{ $item['quantity'] }}</span>
-                                        <button class="text-primary font-bold btn-qty" data-action="plus" data-id="{{ $item['product']->id }}">+</button>
+                                    <!-- Quantity Picker with Limits -->
+                                    <div class="flex items-center border border-slate-200 rounded-xl h-9 px-2 bg-slate-50/50 justify-between w-28">
+                                        <button class="w-7 h-7 rounded-lg hover:bg-slate-200 font-extrabold flex items-center justify-center text-slate-500 transition-colors btn-qty" data-action="minus" data-id="{{ $item['product']->id }}">-</button>
+                                        <span class="text-xs font-bold w-6 text-center text-slate-800 qty-val" data-id="{{ $item['product']->id }}" data-stock="{{ $item['product']->stock }}">{{ $item['quantity'] }}</span>
+                                        <button class="w-7 h-7 rounded-lg hover:bg-slate-200 font-extrabold flex items-center justify-center text-slate-500 transition-colors btn-qty" data-action="plus" data-id="{{ $item['product']->id }}">+</button>
                                     </div>
                                 </div>
                             </div>
                         </article>
                     @empty
-                        <div class="p-8 text-center text-muted">
-                            Keranjang belanja Anda kosong. <a href="{{ route('home') }}" class="text-primary font-bold hover:underline">Belanja Sekarang</a>.
+                        <div class="p-12 text-center text-slate-400 dark:text-slate-500">
+                            <span class="material-symbols-outlined text-[48px] text-slate-300 mb-3">shopping_cart</span>
+                            <p class="font-bold text-sm text-slate-800">Keranjang belanja Anda kosong.</p>
+                            <p class="text-xs mt-1 mb-4">Ayo cari obat atau kebutuhan hewan piaraan Anda sekarang!</p>
+                            <a href="{{ route('home') }}" class="inline-block bg-primary text-white font-bold px-6 py-2.5 rounded-xl text-xs hover:bg-primary/95 transition-all shadow-sm active:scale-95">
+                                Belanja Sekarang
+                            </a>
                         </div>
                     @endforelse
                 </div>
             </section>
-            <!-- RIGHT COLUMN: Summary Card -->
-            <aside class="lg:col-span-1">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-28" data-purpose="order-summary-card">
-                    <h2 class="font-bold text-lg mb-6">Ringkasan belanja</h2>
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-gray-600">Total</span>
-                        <span class="text-xl font-bold text-primary" id="total-price">Rp{{ number_format($totalPrice, 0, ',', '.') }}</span>
+
+            <!-- RIGHT COLUMN: Summary Card (Col Span 4) -->
+            <aside class="lg:col-span-4">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 sticky top-24" data-purpose="order-summary-card">
+                    <h2 class="font-bold text-slate-800 text-base mb-4 border-b border-slate-50 pb-3">Ringkasan Belanja</h2>
+                    
+                    <div class="flex justify-between items-center mb-6 text-sm">
+                        <span class="text-slate-500 font-medium">Total Harga</span>
+                        <span class="text-xl font-extrabold text-primary" id="total-price">Rp {{ number_format($totalPrice, 0, ',', '.') }}</span>
                     </div>
-                    <!-- Buy Button -->
+
+                    <!-- Checkout Redirect Action -->
                     @if(count($cartItems) > 0)
                         <button id="btn-buy" onclick="window.location.href='{{ route('checkout.index') }}'"
-                            class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-primary/95 transition-colors shadow-md">
+                            class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-primary/95 transition-colors shadow-md flex items-center justify-center gap-2 text-sm active:scale-[0.98]">
+                            <span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
                             Beli ({{ count($cartItems) }})
                         </button>
                     @else
-                        <button disabled class="w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-xl cursor-not-allowed">
+                        <button disabled class="w-full bg-slate-100 text-slate-400 font-bold py-3 rounded-xl cursor-not-allowed text-sm">
                             Beli (0)
                         </button>
                     @endif
-                    <!-- Disclaimer -->
-                    <div class="mt-4 flex items-center justify-center space-x-2 text-xs text-gray-400">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                        </svg>
+
+                    <div class="mt-4 flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-semibold">
+                        <span class="material-symbols-outlined text-[14px]">lock</span>
                         <span>Pembayaran Aman &amp; Terenkripsi</span>
                     </div>
                 </div>
@@ -117,7 +138,7 @@
 @push('script')
     <script>
         $(document).ready(function() {
-            // --- 1. UTILITY: Fungsi Hitung Total Harga & Jumlah Item Terpilih ---
+            // --- 1. UTILITY: Recalculate Cart Summary ---
             function updateCartSummary() {
                 let totalHarga = 0;
                 let selectedCount = 0;
@@ -135,47 +156,68 @@
                     }
                 });
 
-                // Update Total Harga
-                $('#total-price').text('Rp' + totalHarga.toLocaleString('id-ID'));
+                // Update Total Price display
+                $('#total-price').text('Rp ' + totalHarga.toLocaleString('id-ID'));
 
-                // Update Beli Button
+                // Update Buy Button label
                 $('#select-all-label').text('Pilih Semua (' + totalItems + ')');
                 if (selectedCount > 0) {
-                    $('#btn-buy').text('Beli (' + selectedCount + ')').prop('disabled', false).removeClass('bg-gray-300 text-gray-500 cursor-not-allowed').addClass('bg-primary text-white');
+                    $('#btn-buy').html('<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span> Beli (' + selectedCount + ')').prop('disabled', false).removeClass('bg-slate-100 text-slate-400 cursor-not-allowed').addClass('bg-primary text-white');
                 } else {
-                    $('#btn-buy').text('Beli (0)').prop('disabled', true).addClass('bg-gray-300 text-gray-500 cursor-not-allowed').removeClass('bg-primary text-white');
+                    $('#btn-buy').html('Beli (0)').prop('disabled', true).addClass('bg-slate-100 text-slate-400 cursor-not-allowed').removeClass('bg-primary text-white');
                 }
 
-                // Master Checkbox State
+                // Master Checkbox State sync
                 $('#selectAll').prop('checked', selectedCount === totalItems && totalItems > 0);
+                
+                // Disable/Enable Plus and Minus buttons per item
+                $('.qty-val').each(function() {
+                    let id = $(this).data('id');
+                    let qty = parseInt($(this).text()) || 1;
+                    let stock = parseInt($(this).data('stock')) || 0;
+                    
+                    let $btnMinus = $('.btn-qty[data-action="minus"][data-id="' + id + '"]');
+                    let $btnPlus = $('.btn-qty[data-action="plus"][data-id="' + id + '"]');
+                    
+                    // Enable/disable minus
+                    $btnMinus.prop('disabled', qty <= 1).toggleClass('opacity-30 cursor-not-allowed', qty <= 1);
+                    // Enable/disable plus
+                    $btnPlus.prop('disabled', qty >= stock).toggleClass('opacity-30 cursor-not-allowed', qty >= stock);
+                });
             }
 
-            // --- 2. EVENT: Kuantitas Plus / Minus ---
-            $(document).on('click', '.btn-qty', function() {
+            // --- 2. EVENT: Quantity Plus / Minus Controls with Stock Checks ---
+            $(document).on('click', '.btn-qty', function(e) {
+                e.preventDefault();
                 let $btn = $(this);
                 let id = $btn.data('id');
                 let action = $btn.data('action');
                 let $qtyTarget = $('.qty-val[data-id="' + id + '"]');
 
                 let currentQty = parseInt($qtyTarget.text()) || 1;
+                let maxStock = parseInt($qtyTarget.data('stock')) || 0;
                 let newQty = currentQty;
 
                 if (action === 'minus' && currentQty > 1) {
                     newQty = currentQty - 1;
                 } else if (action === 'plus') {
+                    if (currentQty >= maxStock) {
+                        alert('Kuantitas tidak dapat melebihi stok yang tersedia (' + maxStock + ' unit).');
+                        return;
+                    }
                     newQty = currentQty + 1;
                 }
 
                 if (newQty !== currentQty) {
                     $qtyTarget.text(newQty);
                     
-                    // Sync quantity with backend session
+                    // Sync quantity with backend Laravel session
                     $.post('{{ route("cart.update") }}', {
                         _token: '{{ csrf_token() }}',
                         product_id: id,
                         quantity: newQty
                     }).fail(function(xhr) {
-                        // revert
+                        // Revert quantity if backend rejects
                         $qtyTarget.text(currentQty);
                         alert(xhr.responseJSON.message || 'Gagal mengubah kuantitas.');
                         updateCartSummary();
@@ -185,19 +227,19 @@
                 updateCartSummary();
             });
 
-            // --- 3. EVENT: Checkbox "Pilih Semua" ---
+            // --- 3. EVENT: Master Checkbox "Pilih Semua" ---
             $(document).on('change', '#selectAll', function() {
                 let isChecked = $(this).is(':checked');
                 $('.item-checkbox').prop('checked', isChecked);
                 updateCartSummary();
             });
 
-            // --- 4. EVENT: Checkbox Per Item ---
+            // --- 4. EVENT: Item Checkbox Trigger ---
             $(document).on('change', '.item-checkbox', function() {
                 updateCartSummary();
             });
 
-            // Run once on load
+            // Run once on initial page load
             updateCartSummary();
         });
     </script>

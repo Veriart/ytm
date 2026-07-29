@@ -163,21 +163,29 @@
                     <img alt="Yakin Tri Medika Logo" class="h-10 w-auto object-contain" src="{{ \App\Models\Setting::getValue('logo', '/img/ytm.jpeg') }}" />
                 </a>
             </div>
+
+            <!-- Search Bar (Header - Desktop & Tablet) -->
+            <form action="{{ route('home') }}" method="GET" class="hidden md:flex flex-1 max-w-xs lg:max-w-sm relative mx-4">
+                @if(request('category'))
+                    <input type="hidden" name="category" value="{{ request('category') }}" />
+                @endif
+                @if(request('target'))
+                    <input type="hidden" name="target" value="{{ request('target') }}" />
+                @endif
+                <div class="relative w-full">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari obat hewan, merek, bahan..." class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs pl-9 pr-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-inner" />
+                    <span class="material-symbols-outlined absolute left-3 top-2 text-slate-400 text-base">search</span>
+                </div>
+            </form>
             
             <!-- Category Links (Modern Pills) -->
             <nav class="hidden lg:flex items-center gap-xs">
                 <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ !request('category') || request('category') == 'all' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'all']) }}">All</a>
-                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'cats' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'cats']) }}">Cats &amp; Dogs</a>
-                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'livestock' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'livestock']) }}">Livestock</a>
-                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'poultry' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'poultry']) }}">Poultry</a>
-                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'birds' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'birds']) }}">Birds</a>
-                <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == 'aqua' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'aqua']) }}">Aqua</a>
+                    href="{{ route('home', array_merge(request()->query(), ['category' => 'all'])) }}">All</a>
+                @foreach(\App\Models\Category::all() as $cat)
+                    <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == $cat->slug ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
+                        href="{{ route('home', array_merge(request()->query(), ['category' => $cat->slug])) }}">{{ $cat->name }}</a>
+                @endforeach
             </nav>
 
             <!-- Actions & Auth -->
@@ -259,17 +267,11 @@
         <div class="w-full bg-surface-container-lowest lg:hidden flex justify-center py-2 border-t border-outline-variant/30">
             <nav class="max-w-[1280px] w-full px-margin-mobile flex gap-xs overflow-x-auto hide-scrollbar scroll-smooth">
                 <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ !request('category') || request('category') == 'all' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'all']) }}">All</a>
-                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'cats' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'cats']) }}">Cats &amp; Dogs</a>
-                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'livestock' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'livestock']) }}">Livestock</a>
-                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'poultry' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'poultry']) }}">Poultry</a>
-                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'birds' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'birds']) }}">Birds</a>
-                <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == 'aqua' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
-                    href="{{ route('home', ['category' => 'aqua']) }}">Aqua</a>
+                    href="{{ route('home', array_merge(request()->query(), ['category' => 'all'])) }}">All</a>
+                @foreach(\App\Models\Category::all() as $cat)
+                    <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == $cat->slug ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
+                        href="{{ route('home', array_merge(request()->query(), ['category' => $cat->slug])) }}">{{ $cat->name }}</a>
+                @endforeach
             </nav>
         </div>
     </header>
@@ -372,6 +374,31 @@
             });
         }
     </script>
+    <!-- Floating Toast Notification -->
+    @if(session('success') || session('error'))
+        <div id="toast-notification" class="fixed top-20 right-6 z-50 transform translate-y-0 opacity-100 transition-all duration-500 max-w-sm w-full bg-white dark:bg-slate-800 rounded-2xl shadow-xl border {{ session('success') ? 'border-emerald-100 dark:border-emerald-900/50' : 'border-rose-100 dark:border-rose-900/50' }} p-4 flex gap-3">
+            <div class="w-8 h-8 rounded-full {{ session('success') ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }} flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-[20px]">{{ session('success') ? 'check_circle' : 'error' }}</span>
+            </div>
+            <div class="flex-1 text-xs">
+                <p class="font-bold text-slate-800 dark:text-white">{{ session('success') ? 'Berhasil' : 'Pemberitahuan' }}</p>
+                <p class="text-slate-500 dark:text-slate-400 mt-0.5">{{ session('success') ?? session('error') }}</p>
+            </div>
+            <button onclick="document.getElementById('toast-notification').classList.add('translate-y-[-20px]', 'opacity-0'); setTimeout(() => document.getElementById('toast-notification').remove(), 500);" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                <span class="material-symbols-outlined text-[16px]">close</span>
+            </button>
+        </div>
+        <script>
+            setTimeout(() => {
+                const toast = document.getElementById('toast-notification');
+                if (toast) {
+                    toast.classList.add('translate-y-[-20px]', 'opacity-0');
+                    setTimeout(() => toast.remove(), 500);
+                }
+            }, 4000);
+        </script>
+    @endif
+
     @stack('script')
 </body>
 
