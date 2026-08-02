@@ -27,15 +27,49 @@
                 @csrf
                 
                 <!-- Hidden Calculation Inputs -->
-                <input type="hidden" name="shipping_cost" id="input-shipping-cost" value="15000" />
+                <input type="hidden" name="delivery_option" id="input-delivery-option" value="shipping" />
+                <input type="hidden" name="payment_mode" id="input-payment-mode" value="transfer" />
+                <input type="hidden" name="shipping_cost" id="input-shipping-cost" value="{{ $shippingMethods->first()->cost ?? 0 }}" />
                 <input type="hidden" name="discount" id="input-discount" value="0" />
                 <input type="hidden" name="service_fee" id="input-service-fee" value="2000" />
-                <input type="hidden" name="payment_method" id="input-payment-method" value="BCA Virtual Account" />
 
                 <!-- Left Column: Shipping & Order list (Col Span 8) -->
                 <div class="lg:col-span-8 space-y-8">
-                    <!-- Section: Delivery Address -->
+                    <!-- Section: Opsi Pengiriman -->
                     <section class="space-y-4">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">local_shipping</span>
+                            Pilih Metode Penerimaan Barang
+                        </h2>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Option 1: Kirim Kurir -->
+                            <label class="p-4 bg-white rounded-xl text-left border-2 border-primary ring-2 ring-primary/10 cursor-pointer delivery-opt-btn block transition-all" data-value="shipping">
+                                <div class="flex items-center gap-3 mb-1">
+                                    <input type="radio" name="delivery_option_radio" value="shipping" checked class="w-4 h-4 text-primary focus:ring-primary delivery-opt-radio cursor-pointer" />
+                                    <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-[18px] text-primary">local_shipping</span>
+                                        Kirim ke Alamat (Kurir)
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-400 pl-7">Pesanan Anda akan dikirim ke alamat tujuan dengan jasa ekspedisi pilihan.</p>
+                            </label>
+                            
+                            <!-- Option 2: Ambil di Toko -->
+                            <label class="p-4 bg-white rounded-xl text-left border border-slate-200 hover:border-primary cursor-pointer delivery-opt-btn block transition-all" data-value="pickup">
+                                <div class="flex items-center gap-3 mb-1">
+                                    <input type="radio" name="delivery_option_radio" value="pickup" class="w-4 h-4 text-primary focus:ring-primary delivery-opt-radio cursor-pointer" />
+                                    <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-[18px] text-primary">store</span>
+                                        Ambil di Toko Utama (YTM)
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-400 pl-7">Ambil pesanan secara langsung di toko utama kami tanpa biaya pengiriman.</p>
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Section: Delivery Address -->
+                    <section id="shipping-address-section" class="space-y-4">
                         <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
                             <span class="material-symbols-outlined text-primary">location_on</span>
                             Informasi Alamat Pengiriman
@@ -49,7 +83,7 @@
 
                             <div>
                                 <label class="font-bold text-xs text-slate-400 uppercase tracking-wider block mb-1.5">Nomor Telepon Penerima <span class="text-rose-500">*</span></label>
-                                <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" required placeholder="Contoh: 081234567890" class="w-full bg-slate-50 text-sm py-2.5 px-3 rounded-xl border {{ $errors->has('phone') ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-200 focus:ring-primary' }} focus:outline-none focus:ring-2 focus:border-transparent transition-all" />
+                                <input type="text" name="phone" id="phone" value="{{ old('phone', $user->phone) }}" required placeholder="Contoh: 081234567890" class="w-full bg-slate-50 text-sm py-2.5 px-3 rounded-xl border {{ $errors->has('phone') ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-200 focus:ring-primary' }} focus:outline-none focus:ring-2 focus:border-transparent transition-all" />
                                 @error('phone')
                                     <span class="text-rose-500 text-xs mt-1 block font-semibold">{{ $message }}</span>
                                 @enderror
@@ -57,7 +91,7 @@
 
                             <div>
                                 <label class="font-bold text-xs text-slate-400 uppercase tracking-wider block mb-1.5">Alamat Lengkap Pengiriman <span class="text-rose-500">*</span></label>
-                                <textarea name="shipping_address" rows="3" required placeholder="Tuliskan alamat lengkap pengiriman secara detail (jalan, nomor rumah, kelurahan, kecamatan, kota/kabupaten, dan kode pos)..." class="w-full bg-slate-50 text-sm py-2.5 px-3 rounded-xl border {{ $errors->has('shipping_address') ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-200 focus:ring-primary' }} focus:outline-none focus:ring-2 focus:border-transparent transition-all">{{ old('shipping_address', $user->address) }}</textarea>
+                                <textarea name="shipping_address" id="shipping_address" rows="3" required placeholder="Tuliskan alamat lengkap pengiriman secara detail (jalan, nomor rumah, kelurahan, kecamatan, kota/kabupaten, dan kode pos)..." class="w-full bg-slate-50 text-sm py-2.5 px-3 rounded-xl border {{ $errors->has('shipping_address') ? 'border-rose-500 focus:ring-rose-500' : 'border-slate-200 focus:ring-primary' }} focus:outline-none focus:ring-2 focus:border-transparent transition-all">{{ old('shipping_address', $user->address) }}</textarea>
                                 @error('shipping_address')
                                     <span class="text-rose-500 text-xs mt-1 block font-semibold">{{ $message }}</span>
                                 @enderror
@@ -100,35 +134,30 @@
                     </section>
 
                     <!-- Courier Selection -->
-                    <section class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                    <section id="courier-section" class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                             <span class="material-symbols-outlined text-primary text-[20px]">local_shipping</span>
                             Pilih Jasa Ekspedisi Pengiriman
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Option 1: JNE Reguler -->
-                            <label class="p-4 bg-white rounded-xl text-left border-2 border-primary ring-2 ring-primary/10 cursor-pointer courier-btn block transition-all" data-cost="15000">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="flex items-center gap-2">
-                                        <input type="radio" name="courier" value="JNE Reguler" checked class="w-4 h-4 text-primary focus:ring-primary courier-radio cursor-pointer" />
-                                        <span class="font-bold text-slate-800 text-sm">JNE Reguler (2-3 Hari)</span>
+                            @forelse($shippingMethods as $idx => $sm)
+                                <label class="p-4 bg-white rounded-xl text-left border {{ $idx === 0 ? 'border-2 border-primary ring-2 ring-primary/10' : 'border-slate-200 hover:border-primary' }} cursor-pointer courier-btn block transition-all" data-cost="{{ $sm->cost }}">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <div class="flex items-center gap-2">
+                                            <input type="radio" name="courier" value="{{ $sm->name }}" {{ $idx === 0 ? 'checked' : '' }} class="w-4 h-4 text-primary focus:ring-primary courier-radio cursor-pointer" />
+                                            <span class="font-bold text-slate-800 text-sm">{{ $sm->name }}</span>
+                                        </div>
+                                        <span class="text-sm text-primary font-extrabold">Rp {{ number_format($sm->cost, 0, ',', '.') }}</span>
                                     </div>
-                                    <span class="text-sm text-primary font-extrabold">Rp 15.000</span>
+                                    @if($sm->description)
+                                        <p class="text-xs text-slate-400 pl-6">{{ $sm->description }}</p>
+                                    @endif
+                                </label>
+                            @empty
+                                <div class="col-span-2 text-center py-4 bg-slate-50 border border-slate-100 rounded-xl">
+                                    <p class="text-xs text-slate-400 italic font-semibold">Tidak ada metode pengiriman ekspedisi yang tersedia.</p>
                                 </div>
-                                <p class="text-xs text-slate-400 pl-6">Layanan reguler bersertifikasi cold safety</p>
-                            </label>
-                            
-                            <!-- Option 2: Express YES -->
-                            <label class="p-4 bg-white rounded-xl text-left border border-slate-200 hover:border-primary cursor-pointer courier-btn block transition-all" data-cost="45000">
-                                <div class="flex justify-between items-center mb-1">
-                                    <div class="flex items-center gap-2">
-                                        <input type="radio" name="courier" value="Express (1 Hari)" class="w-4 h-4 text-primary focus:ring-primary courier-radio cursor-pointer" />
-                                        <span class="font-bold text-slate-800 text-sm">Express YES (1 Hari)</span>
-                                    </div>
-                                    <span class="text-sm text-slate-700 font-extrabold">Rp 45.000</span>
-                                </div>
-                                <p class="text-xs text-slate-400 pl-6">Layanan kilat 1 hari dengan box cold chain khusus obat</p>
-                            </label>
+                            @endforelse
                         </div>
                     </section>
                 </div>
@@ -136,25 +165,52 @@
                 <!-- Right Column: Sticky Summary & Payment Method (Col Span 4) -->
                 <div class="lg:col-span-4">
                     <div class="sticky top-24 space-y-6">
-                        <!-- Payment Method selection -->
+                        <!-- Payment Method Info -->
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
                             <h3 class="font-bold text-slate-800 text-xs uppercase tracking-wider border-b border-slate-50 pb-2">Metode Pembayaran</h3>
-                            <div class="space-y-2">
-                                <label class="flex items-center justify-between p-3 rounded-xl border border-primary/20 bg-blue-50/10 cursor-pointer pm-btn transition-all">
+                            
+                            <!-- Pickup Payment Options Selector (Only shown when pickup is active) -->
+                            <div id="pickup-payment-selector" class="hidden space-y-2 mb-4">
+                                <label class="flex items-center justify-between p-3 rounded-xl border-2 border-primary ring-2 ring-primary/10 cursor-pointer pickup-pm-btn transition-all" data-value="transfer">
                                     <div class="flex items-center gap-3">
-                                        <input type="radio" name="pay_radio" value="BCA Virtual Account" checked class="w-4 h-4 text-primary focus:ring-primary pm-radio cursor-pointer" />
-                                        <div class="w-10 h-6 bg-white rounded border border-slate-200 flex items-center justify-center font-bold text-[9px] text-blue-800">BCA</div>
-                                        <span class="text-sm text-slate-700 font-bold">BCA Virtual Account</span>
+                                        <input type="radio" name="pickup_payment_radio" value="transfer" checked class="w-4 h-4 text-primary focus:ring-primary pickup-pm-radio cursor-pointer" />
+                                        <span class="text-sm text-slate-700 font-bold">Transfer (Midtrans)</span>
                                     </div>
                                 </label>
                                 
-                                <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-primary cursor-pointer pm-btn transition-all">
+                                <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-primary cursor-pointer pickup-pm-btn transition-all" data-value="cash">
                                     <div class="flex items-center gap-3">
-                                        <input type="radio" name="pay_radio" value="Mandiri Bill Payment" class="w-4 h-4 text-primary focus:ring-primary pm-radio cursor-pointer" />
-                                        <div class="w-10 h-6 bg-white rounded border border-slate-200 flex items-center justify-center font-bold text-[9px] text-blue-500">MANDIRI</div>
-                                        <span class="text-sm text-slate-700 font-bold">Mandiri Bill Payment</span>
+                                        <input type="radio" name="pickup_payment_radio" value="cash" class="w-4 h-4 text-primary focus:ring-primary pickup-pm-radio cursor-pointer" />
+                                        <span class="text-sm text-slate-700 font-bold">Bayar Cash di Kasir</span>
                                     </div>
                                 </label>
+                            </div>
+
+                            <!-- Midtrans Info Box -->
+                            <div id="midtrans-info-box" class="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col gap-3">
+                                <div class="flex items-center gap-2 text-primary font-bold text-sm">
+                                    <span class="material-symbols-outlined text-[18px]">security</span>
+                                    <span>Midtrans Payment Gateway</span>
+                                </div>
+                                <p class="text-slate-500 text-[11px] font-semibold leading-relaxed">
+                                    Setelah menekan tombol "Bayar Sekarang", Anda akan diarahkan ke halaman pembayaran Midtrans untuk menyelesaikan pembayaran secara aman via:
+                                </p>
+                                <div class="grid grid-cols-3 gap-2 items-center opacity-80 mt-1">
+                                    <div class="px-2 py-1 bg-white border border-slate-200 rounded text-center text-[9px] font-bold text-slate-600">Virtual Account</div>
+                                    <div class="px-2 py-1 bg-white border border-slate-200 rounded text-center text-[9px] font-bold text-slate-600">GoPay / QRIS</div>
+                                    <div class="px-2 py-1 bg-white border border-slate-200 rounded text-center text-[9px] font-bold text-slate-600">Kartu Kredit</div>
+                                </div>
+                            </div>
+
+                            <!-- Cash Info Box -->
+                            <div id="cash-info-box" class="hidden p-4 bg-emerald-50 text-emerald-850 rounded-xl border border-emerald-100 flex flex-col gap-2">
+                                <div class="flex items-center gap-2 text-emerald-700 font-bold text-sm">
+                                    <span class="material-symbols-outlined text-[18px]">payments</span>
+                                    <span>Bayar Tunai di Kasir</span>
+                                </div>
+                                <p class="text-[11px] font-semibold leading-relaxed text-emerald-600">
+                                    Pesanan Anda akan langsung diproses. Silakan tunjukkan nomor invoice pesanan Anda ke kasir YTM saat melakukan pengambilan barang untuk melakukan pembayaran cash secara langsung di kasir toko.
+                                </p>
                             </div>
                         </div>
 
@@ -168,7 +224,7 @@
                                 </div>
                                 <div class="flex justify-between">
                                     <span>Total Ongkos Kirim</span>
-                                    <span id="txt-shipping-cost" class="text-slate-800">Rp 15.000</span>
+                                    <span id="txt-shipping-cost" class="text-slate-800">Rp {{ number_format($shippingMethods->first()->cost ?? 0, 0, ',', '.') }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span>Biaya Jasa Layanan</span>
@@ -182,7 +238,7 @@
                             
                             <div class="pt-4 border-t border-dashed border-slate-100 flex justify-between items-center">
                                 <span class="font-bold text-slate-800 text-sm">Total Tagihan</span>
-                                <span class="font-extrabold text-primary text-xl" id="txt-grandtotal">Rp {{ number_format($totalPrice + 15000 + 2000, 0, ',', '.') }}</span>
+                                <span class="font-extrabold text-primary text-xl" id="txt-grandtotal">Rp {{ number_format($totalPrice + ($shippingMethods->first()->cost ?? 0) + 2000, 0, ',', '.') }}</span>
                             </div>
                             
                             <button type="submit" id="btn-submit-checkout" class="w-full bg-primary text-white py-3 rounded-xl font-bold text-sm hover:bg-primary/95 active:scale-98 transition-all shadow-md flex items-center justify-center gap-2">
@@ -233,30 +289,120 @@
                     recalculateTotals();
                 });
             });
-
-            // Update Payment Method selection
-            const pmButtons = document.querySelectorAll('.pm-btn');
+            // Update Delivery Option selection
+            const deliveryOptButtons = document.querySelectorAll('.delivery-opt-btn');
+            const shippingAddressSection = document.getElementById('shipping-address-section');
+            const courierSection = document.getElementById('courier-section');
+            const shippingAddressInput = document.getElementById('shipping_address');
             
-            pmButtons.forEach(btn => {
+            // Pickup payment controls
+            const pickupPmSelector = document.getElementById('pickup-payment-selector');
+            const pickupPmButtons = document.querySelectorAll('.pickup-pm-btn');
+            const midtransInfoBox = document.getElementById('midtrans-info-box');
+            const cashInfoBox = document.getElementById('cash-info-box');
+            
+            deliveryOptButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    // Reset all payment button borders
-                    pmButtons.forEach(b => {
-                        b.classList.remove('border-primary/20', 'bg-blue-50/10');
+                    // Reset all delivery options borders
+                    deliveryOptButtons.forEach(b => {
+                        b.classList.remove('border-2', 'border-primary', 'ring-2', 'ring-primary/10');
+                        b.classList.add('border', 'border-slate-200');
+                        b.querySelector('.delivery-opt-radio').checked = false;
+                    });
+                    
+                    // Set current clicked button active
+                    this.classList.remove('border', 'border-slate-200');
+                    this.classList.add('border-2', 'border-primary', 'ring-2', 'ring-primary/10');
+                    
+                    // Check internal radio button
+                    const radio = this.querySelector('.delivery-opt-radio');
+                    radio.checked = true;
+                    
+                    const value = this.getAttribute('data-value');
+                    document.getElementById('input-delivery-option').value = value;
+                    
+                    if (value === 'pickup') {
+                        // Hide courier & address
+                        shippingAddressSection.classList.add('hidden');
+                        courierSection.classList.add('hidden');
+                        
+                        // Disable requirements
+                        shippingAddressInput.required = false;
+                        
+                        // Update shipping cost in calculation
+                        document.getElementById('input-shipping-cost').value = 0;
+                        document.getElementById('txt-shipping-cost').textContent = 'Rp 0';
+                        
+                        // Show pickup payment selector
+                        pickupPmSelector.classList.remove('hidden');
+                        
+                        // Sync visual and input based on checked radio button
+                        const activePmBtn = document.querySelector('.pickup-pm-btn.border-primary');
+                        const pmValue = activePmBtn ? activePmBtn.getAttribute('data-value') : 'transfer';
+                        document.getElementById('input-payment-mode').value = pmValue;
+                        
+                        if (pmValue === 'cash') {
+                            midtransInfoBox.classList.add('hidden');
+                            cashInfoBox.classList.remove('hidden');
+                        } else {
+                            midtransInfoBox.classList.remove('hidden');
+                            cashInfoBox.classList.add('hidden');
+                        }
+                    } else {
+                        // Show courier & address
+                        shippingAddressSection.classList.remove('hidden');
+                        courierSection.classList.remove('hidden');
+                        
+                        // Enable requirements
+                        shippingAddressInput.required = true;
+                        
+                        // Restore shipping cost based on selected courier
+                        const activeCourierBtn = document.querySelector('.courier-btn.border-primary');
+                        const cost = activeCourierBtn ? parseInt(activeCourierBtn.getAttribute('data-cost')) : {{ $shippingMethods->first()->cost ?? 0 }};
+                        document.getElementById('input-shipping-cost').value = cost;
+                        document.getElementById('txt-shipping-cost').textContent = 'Rp ' + cost.toLocaleString('id-ID');
+                        
+                        // Hide pickup payment selector & reset payment mode to transfer
+                        pickupPmSelector.classList.add('hidden');
+                        document.getElementById('input-payment-mode').value = 'transfer';
+                        midtransInfoBox.classList.remove('hidden');
+                        cashInfoBox.classList.add('hidden');
+                    }
+                    
+                    recalculateTotals();
+                });
+            });
+
+            // Update Pickup Payment Mode selection
+            pickupPmButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Reset all pickup payment buttons borders
+                    pickupPmButtons.forEach(b => {
+                        b.classList.remove('border-2', 'border-primary', 'ring-2', 'ring-primary/10');
                         b.classList.add('border-slate-200');
-                        b.querySelector('.pm-radio').checked = false;
+                        b.querySelector('.pickup-pm-radio').checked = false;
                     });
                     
                     // Set current clicked button active
                     this.classList.remove('border-slate-200');
-                    this.classList.add('border-primary/20', 'bg-blue-50/10');
+                    this.classList.add('border-2', 'border-primary', 'ring-2', 'ring-primary/10');
                     
-                    const radio = this.querySelector('.pm-radio');
+                    // Check internal radio button
+                    const radio = this.querySelector('.pickup-pm-radio');
                     radio.checked = true;
                     
-                    document.getElementById('input-payment-method').value = radio.value;
+                    const value = this.getAttribute('data-value');
+                    document.getElementById('input-payment-mode').value = value;
+                    
+                    if (value === 'cash') {
+                        midtransInfoBox.classList.add('hidden');
+                        cashInfoBox.classList.remove('hidden');
+                    } else {
+                        midtransInfoBox.classList.remove('hidden');
+                        cashInfoBox.classList.add('hidden');
+                    }
                 });
             });
-
             // Recalculate Total Bills
             function recalculateTotals() {
                 const subtotal = parseInt(document.getElementById('txt-subtotal').getAttribute('data-value')) || 0;

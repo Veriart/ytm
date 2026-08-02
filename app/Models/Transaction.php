@@ -19,6 +19,10 @@ class Transaction extends Model
         'service_fee',
         'discount',
         'notes',
+        'delivery_option',
+        'tracking_number',
+        'midtrans_snap_token',
+        'midtrans_payment_url',
     ];
 
     public function user()

@@ -115,8 +115,8 @@
         <!-- Recipient Information Card -->
         <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-sm p-6 space-y-4">
             <h3 class="text-base font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-700 pb-3 flex items-center gap-2">
-                <i data-lucide="truck" class="w-5 h-5 text-emerald-500"></i>
-                Informasi Penerima &amp; Alamat Pengiriman
+                <i data-lucide="{{ $transaction->delivery_option === 'pickup' ? 'store' : 'truck' }}" class="w-5 h-5 text-emerald-500"></i>
+                Informasi Penerima &amp; Metode Pengiriman ({{ $transaction->delivery_option === 'pickup' ? 'Ambil di Toko' : 'Kirim via Kurir' }})
             </h3>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
@@ -131,14 +131,23 @@
                 </div>
 
                 <div class="sm:col-span-2">
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Alamat Lengkap Tujuan</label>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Alamat / Lokasi Pengambilan</label>
                     <p class="font-medium text-slate-700 dark:text-slate-200 leading-relaxed bg-slate-50 dark:bg-slate-900/40 p-4 rounded-xl border border-slate-100 dark:border-slate-800">{{ $transaction->shipping_address }}</p>
                 </div>
 
                 <div class="sm:col-span-2">
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Catatan Kurir &amp; Metode Pembayaran</label>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Metode Pengiriman &amp; Log Pembayaran</label>
                     <p class="font-medium text-slate-600 dark:text-slate-300 italic">{{ $transaction->notes ?? 'Tidak ada catatan khusus' }}</p>
                 </div>
+
+                @if($transaction->delivery_option === 'shipping')
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Nomor Resi Pengiriman</label>
+                        <p class="font-bold text-emerald-600 text-base bg-emerald-50 dark:bg-emerald-950/20 px-3 py-2 rounded-xl border border-emerald-100 dark:border-emerald-900/50 inline-block">
+                            {{ $transaction->tracking_number ?? 'Belum diinput' }}
+                        </p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -171,6 +180,11 @@
                         <span class="w-2 h-2 rounded-full bg-blue-500"></span>
                         Dikirim (Dalam Perjalanan)
                     </span>
+                @elseif($transaction->status === 'completed')
+                    <span class="inline-flex items-center gap-1.5 text-sm font-bold bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 px-4 py-2 rounded-xl border border-emerald-100 dark:border-emerald-900/30 w-full justify-center">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        Selesai (Diterima Pembeli)
+                    </span>
                 @else
                     <span class="inline-flex items-center gap-1.5 text-sm font-bold bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 px-4 py-2 rounded-xl border border-rose-100 dark:border-rose-900/30 w-full justify-center">
                         <span class="w-2 h-2 rounded-full bg-rose-500"></span>
@@ -190,13 +204,21 @@
                         <option value="pending" {{ $transaction->status === 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="paid" {{ $transaction->status === 'paid' ? 'selected' : '' }}>Lunas</option>
                         <option value="shipped" {{ $transaction->status === 'shipped' ? 'selected' : '' }}>Dikirim</option>
+                        <option value="completed" {{ $transaction->status === 'completed' ? 'selected' : '' }}>Selesai</option>
                         <option value="cancelled" {{ $transaction->status === 'cancelled' ? 'selected' : '' }}>Batalkan</option>
                     </select>
                 </div>
+
+                @if($transaction->delivery_option === 'shipping')
+                    <div>
+                        <label for="trackingNumberInput" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nomor Resi Pengiriman</label>
+                        <input type="text" id="trackingNumberInput" name="tracking_number" value="{{ old('tracking_number', $transaction->tracking_number) }}" placeholder="Contoh: JNE123456789" class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all">
+                    </div>
+                @endif
                 
                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-all shadow-sm hover:shadow-emerald-600/10 flex items-center justify-center gap-2">
                     <i data-lucide="check" class="w-4 h-4"></i>
-                    Perbarui Status
+                    Perbarui Status &amp; Resi
                 </button>
             </form>
         </div>

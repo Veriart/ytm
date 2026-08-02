@@ -25,13 +25,20 @@ class TransactionController extends Controller
         $transaction = Transaction::findOrFail($id);
         
         $request->validate([
-            'status' => 'required|in:pending,paid,shipped,cancelled',
+            'status' => 'required|in:pending,paid,shipped,completed,cancelled',
+            'tracking_number' => 'nullable|string|max:100',
         ]);
 
-        $transaction->update([
+        $updateData = [
             'status' => $request->status,
-        ]);
+        ];
 
-        return redirect()->route('admin.transaction.show', $transaction->id)->with('success', 'Status transaksi berhasil diperbarui!');
+        if ($request->has('tracking_number')) {
+            $updateData['tracking_number'] = $request->tracking_number;
+        }
+
+        $transaction->update($updateData);
+
+        return redirect()->route('admin.transaction.show', $transaction->id)->with('success', 'Status transaksi & nomor resi berhasil diperbarui!');
     }
 }

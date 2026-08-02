@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
+use App\Http\Controllers\Admin\ShippingMethodController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 
+// Midtrans payment notification webhook
+Route::post('/payment/notification', [CheckoutController::class, 'paymentNotification'])->name('payment.notification');
+
 // Checkout & User Protected Routes (Requires Auth)
 Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
@@ -26,9 +30,11 @@ Route::middleware(['auth'])->group(function () {
 
     // User transaction history
     Route::get('/transactions', [UserTransactionController::class, 'index'])->name('transactions.history');
+    Route::post('/transactions/{id}/confirm', [UserTransactionController::class, 'confirmArrival'])->name('transactions.confirm');
 
     // Reviews
     Route::post('/product/{id}/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::post('/transactions/{transaction_id}/products/{product_id}/review', [ReviewController::class, 'storeFromTransaction'])->name('review.storeFromTransaction');
 
     // Profile Settings
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
@@ -58,6 +64,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
     Route::put('/category/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+    // Shipping Management
+    Route::resource('shipping', ShippingMethodController::class)->except(['create', 'show', 'edit']);
 
     // Product Management
     Route::resource('product', AdminProductController::class)->except(['show']);
