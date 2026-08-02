@@ -237,7 +237,15 @@
                             <input type="hidden" name="quantity" value="1" />
 
                             @if ($prod->stock > 0)
-                                <button type="submit"
+                                @php
+                                    $disabled = '';
+                                    if (Auth::check()) {
+                                        if (Auth::user()->role == 'admin') {
+                                            $disabled = 'disabled';
+                                        }
+                                    }
+                                @endphp
+                                <button type="submit" {{ $disabled }}
                                     class="w-full bg-secondary-container text-on-secondary-container hover:bg-emerald-600 hover:text-white rounded-xl py-2 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95">
                                     <span class="material-symbols-outlined text-[15px]">shopping_cart</span>
                                     + Keranjang

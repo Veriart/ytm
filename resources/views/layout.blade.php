@@ -155,34 +155,39 @@
 <body
     class="bg-surface font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container">
     <!-- TopNavBar Shell (Modern Glassmorphism) -->
-    <header class="sticky top-0 w-full z-50 flex flex-col items-center bg-white/80 backdrop-blur-md px-margin-mobile md:px-margin-desktop border-b border-outline-variant/30 shadow-sm">
+    <header
+        class="sticky top-0 w-full z-50 flex flex-col items-center bg-white/80 backdrop-blur-md px-margin-mobile md:px-margin-desktop border-b border-outline-variant/30 shadow-sm">
         <div class="max-w-[1280px] w-full h-16 flex items-center justify-between gap-gutter">
             <!-- Brand Logo -->
             <div class="flex items-center gap-xs shrink-0 hover:scale-[1.02] transition-transform duration-200">
                 <a href="/">
-                    <img alt="Yakin Tri Medika Logo" class="h-10 w-auto object-contain" src="{{ \App\Models\Setting::getValue('logo', '/img/ytm.jpeg') }}" />
+                    <img alt="Yakin Tri Medika Logo" class="h-10 w-auto object-contain"
+                        src="{{ \App\Models\Setting::getValue('logo', '/img/ytm.jpeg') }}" />
                 </a>
             </div>
 
             <!-- Search Bar (Header - Desktop & Tablet) -->
-            <form action="{{ route('home') }}" method="GET" class="hidden md:flex flex-1 max-w-xs lg:max-w-sm relative mx-4">
-                @if(request('category'))
+            <form action="{{ route('home') }}" method="GET"
+                class="hidden md:flex flex-1 max-w-xs lg:max-w-sm relative mx-4">
+                @if (request('category'))
                     <input type="hidden" name="category" value="{{ request('category') }}" />
                 @endif
-                @if(request('target'))
+                @if (request('target'))
                     <input type="hidden" name="target" value="{{ request('target') }}" />
                 @endif
                 <div class="relative w-full">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari obat hewan, merek, bahan..." class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs pl-9 pr-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-inner" />
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        placeholder="Cari obat hewan, merek, bahan..."
+                        class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs pl-9 pr-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-inner" />
                     <span class="material-symbols-outlined absolute left-3 top-2 text-slate-400 text-base">search</span>
                 </div>
             </form>
-            
+
             <!-- Category Links (Modern Pills) -->
             <nav class="hidden lg:flex items-center gap-xs">
                 <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ !request('category') || request('category') == 'all' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
                     href="{{ route('home', array_merge(request()->query(), ['category' => 'all'])) }}">All</a>
-                @foreach(\App\Models\Category::all() as $cat)
+                @foreach (\App\Models\Category::all() as $cat)
                     <a class="px-4 py-1.5 rounded-full text-label-md font-semibold transition-all duration-200 {{ request('category') == $cat->slug ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}"
                         href="{{ route('home', array_merge(request()->query(), ['category' => $cat->slug])) }}">{{ $cat->name }}</a>
                 @endforeach
@@ -192,9 +197,12 @@
             <div class="flex items-center gap-sm">
                 <!-- Cart Widget -->
                 <div class="relative me-1">
-                    <a href="{{ route('cart.index') }}" class="relative p-2.5 text-outline hover:text-primary hover:bg-surface-container-low rounded-full flex items-center justify-center transition-all" style="font-size: 24px;">
+                    <a href="{{ route('cart.index') }}"
+                        class="relative p-2.5 text-outline hover:text-primary hover:bg-surface-container-low rounded-full flex items-center justify-center transition-all"
+                        style="font-size: 24px;">
                         <span class="material-symbols-outlined">shopping_cart</span>
-                        <span class="absolute top-0 right-0 bg-secondary text-white text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold border-2 border-white shadow-sm">
+                        <span
+                            class="absolute px-0.5 top-0 right-0 bg-secondary text-white text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold border-2 border-white shadow-sm">
                             {{ session('cart') ? array_sum(session('cart')) : 0 }}
                         </span>
                     </a>
@@ -202,60 +210,76 @@
 
                 @if (!Auth::check())
                     <!-- Guest Actions -->
-                    <a href="{{ route('login') }}" class="px-4 py-1.5 border border-primary text-primary rounded-full font-label-md text-label-md hover:bg-primary/5 transition-all">
+                    <a href="{{ route('login') }}"
+                        class="px-4 py-1.5 border border-primary text-primary rounded-full font-label-md text-label-md hover:bg-primary/5 transition-all">
                         Masuk
                     </a>
-                    <a href="{{ route('register') }}" class="px-4 py-1.5 bg-primary text-white rounded-full font-label-md text-label-md hover:opacity-90 shadow-sm transition-all active:scale-95">
+                    <a href="{{ route('register') }}"
+                        class="px-4 py-1.5 bg-primary text-white rounded-full font-label-md text-label-md hover:opacity-90 shadow-sm transition-all active:scale-95">
                         Daftar
                     </a>
                 @else
                     <!-- Authenticated User Profile Pill Dropdown -->
                     <div class="relative">
-                        <button type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-outline-variant hover:bg-surface-container-low transition-all focus:outline-none" id="profile-pill-trigger">
-                            @if(Auth::user()->profile_photo)
-                                <img src="{{ Auth::user()->profile_photo }}" alt="Avatar" class="w-6.5 h-6.5 rounded-full object-cover shadow-sm" />
+                        <button type="button"
+                            class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-outline-variant hover:bg-surface-container-low transition-all focus:outline-none"
+                            id="profile-pill-trigger">
+                            @if (Auth::user()->profile_photo)
+                                <img src="{{ Auth::user()->profile_photo }}" alt="Avatar"
+                                    class="w-4 h-4 rounded-full object-cover shadow-sm" />
                             @else
-                                <div class="w-6.5 h-6.5 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                                <div
+                                    class="w-6.5 h-6.5 px-1.5 py-1 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs shadow-sm">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                 </div>
                             @endif
-                            <span class="text-body-md font-semibold text-on-surface hidden md:inline max-w-[120px] truncate">{{ Auth::user()->name }}</span>
+                            <span
+                                class="text-body-md font-semibold text-on-surface hidden md:inline max-w-[120px] truncate">{{ Auth::user()->name }}</span>
                             <span class="material-symbols-outlined text-[16px] text-outline">expand_more</span>
                         </button>
 
                         <!-- Dropdown Menu -->
-                        <div class="absolute right-0 mt-2 w-48 bg-white border border-outline-variant rounded-xl shadow-lg py-2 hidden transition-all duration-200" id="profile-dropdown-menu" style="z-index: 100;">
+                        <div class="absolute right-0 mt-2 w-48 bg-white border border-outline-variant rounded-xl shadow-lg py-2 hidden transition-all duration-200"
+                            id="profile-dropdown-menu" style="z-index: 100;">
                             <div class="px-4 py-2 border-b border-outline-variant/40">
-                                <span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold block">Masuk Sebagai</span>
-                                <span class="font-bold text-sm text-on-surface truncate block" title="{{ Auth::user()->name }}">{{ Auth::user()->name }}</span>
+                                <span
+                                    class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold block">Masuk
+                                    Sebagai</span>
+                                <span class="font-bold text-sm text-on-surface truncate block"
+                                    title="{{ Auth::user()->name }}">{{ Auth::user()->name }}</span>
                             </div>
-                            
+
                             @if (Auth::user()->role === 'admin')
-                                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-primary/5 transition-colors">
+                                <a href="{{ route('admin.dashboard') }}"
+                                    class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-primary/5 transition-colors">
                                     <span class="material-symbols-outlined text-[18px] text-primary">dashboard</span>
                                     Panel Admin
                                 </a>
                             @endif
 
-                            <a href="{{ route('profile.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-primary/5 transition-colors">
+                            <a href="{{ route('profile.index') }}"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-primary/5 transition-colors">
                                 <span class="material-symbols-outlined text-[18px] text-primary">person</span>
                                 Edit Profil
                             </a>
 
-                            <a href="{{ route('transactions.history') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-primary/5 transition-colors">
+                            <a href="{{ route('transactions.history') }}"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-on-surface hover:bg-primary/5 transition-colors">
                                 <span class="material-symbols-outlined text-[18px] text-primary">history</span>
                                 Riwayat Transaksi
                             </a>
 
                             <hr class="my-1 border-outline-variant/40" />
 
-                            <a href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center gap-2 px-4 py-2 text-sm text-danger hover:bg-danger/5 transition-colors">
+                            <a href="javascript:void(0);"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-danger hover:bg-danger/5 transition-colors">
                                 <span class="material-symbols-outlined text-[18px] text-danger">logout</span>
                                 Log Out
                             </a>
                         </div>
                     </div>
-                    
+
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                         @csrf
                     </form>
@@ -264,11 +288,13 @@
         </div>
 
         <!-- Subnav (Mobile) -->
-        <div class="w-full bg-surface-container-lowest lg:hidden flex justify-center py-2 border-t border-outline-variant/30">
-            <nav class="max-w-[1280px] w-full px-margin-mobile flex gap-xs overflow-x-auto hide-scrollbar scroll-smooth">
+        <div
+            class="w-full bg-surface-container-lowest lg:hidden flex justify-center py-2 border-t border-outline-variant/30">
+            <nav
+                class="max-w-[1280px] w-full px-margin-mobile flex gap-xs overflow-x-auto hide-scrollbar scroll-smooth">
                 <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ !request('category') || request('category') == 'all' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
                     href="{{ route('home', array_merge(request()->query(), ['category' => 'all'])) }}">All</a>
-                @foreach(\App\Models\Category::all() as $cat)
+                @foreach (\App\Models\Category::all() as $cat)
                     <a class="px-3.5 py-1 rounded-full text-label-md font-semibold whitespace-nowrap transition-all duration-200 {{ request('category') == $cat->slug ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary' }}"
                         href="{{ route('home', array_merge(request()->query(), ['category' => $cat->slug])) }}">{{ $cat->name }}</a>
                 @endforeach
@@ -375,16 +401,22 @@
         }
     </script>
     <!-- Floating Toast Notification -->
-    @if(session('success') || session('error'))
-        <div id="toast-notification" class="fixed top-20 right-6 z-50 transform translate-y-0 opacity-100 transition-all duration-500 max-w-sm w-full bg-white dark:bg-slate-800 rounded-2xl shadow-xl border {{ session('success') ? 'border-emerald-100 dark:border-emerald-900/50' : 'border-rose-100 dark:border-rose-900/50' }} p-4 flex gap-3">
-            <div class="w-8 h-8 rounded-full {{ session('success') ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }} flex items-center justify-center flex-shrink-0">
-                <span class="material-symbols-outlined text-[20px]">{{ session('success') ? 'check_circle' : 'error' }}</span>
+    @if (session('success') || session('error'))
+        <div id="toast-notification"
+            class="fixed top-20 right-6 z-50 transform translate-y-0 opacity-100 transition-all duration-500 max-w-sm w-full bg-white dark:bg-slate-800 rounded-2xl shadow-xl border {{ session('success') ? 'border-emerald-100 dark:border-emerald-900/50' : 'border-rose-100 dark:border-rose-900/50' }} p-4 flex gap-3">
+            <div
+                class="w-8 h-8 rounded-full {{ session('success') ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }} flex items-center justify-center flex-shrink-0">
+                <span
+                    class="material-symbols-outlined text-[20px]">{{ session('success') ? 'check_circle' : 'error' }}</span>
             </div>
             <div class="flex-1 text-xs">
-                <p class="font-bold text-slate-800 dark:text-white">{{ session('success') ? 'Berhasil' : 'Pemberitahuan' }}</p>
+                <p class="font-bold text-slate-800 dark:text-white">
+                    {{ session('success') ? 'Berhasil' : 'Pemberitahuan' }}</p>
                 <p class="text-slate-500 dark:text-slate-400 mt-0.5">{{ session('success') ?? session('error') }}</p>
             </div>
-            <button onclick="document.getElementById('toast-notification').classList.add('translate-y-[-20px]', 'opacity-0'); setTimeout(() => document.getElementById('toast-notification').remove(), 500);" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
+            <button
+                onclick="document.getElementById('toast-notification').classList.add('translate-y-[-20px]', 'opacity-0'); setTimeout(() => document.getElementById('toast-notification').remove(), 500);"
+                class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                 <span class="material-symbols-outlined text-[16px]">close</span>
             </button>
         </div>
