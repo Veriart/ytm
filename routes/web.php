@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Admin\ShippingMethodController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -67,6 +68,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Shipping Management
     Route::resource('shipping', ShippingMethodController::class)->except(['create', 'show', 'edit']);
+
+    // User Management
+    Route::resource('user', UserController::class)->except(['create', 'show', 'edit']);
 
     // Product Management
     Route::resource('product', AdminProductController::class)->except(['show']);

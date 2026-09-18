@@ -26,16 +26,18 @@
             <div
                 class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/5 rounded-full group-hover:scale-125 transition-transform duration-500">
             </div>
-            <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center gap-4 relative z-10">
                 <div
-                    class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                    <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+                    class="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 shadow-inner">
+                    <i data-lucide="dollar-sign" class="w-7 h-7"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-medium text-slate-400 uppercase tracking-wider block">Total Pendapatan</span>
+                    <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5 truncate">Rp
+                        {{ number_format($totalSales, 0, ',', '.') }}</h3>
+                    <p class="text-xs text-slate-400 mt-1">Dari seluruh transaksi terbayar</p>
                 </div>
             </div>
-            <span class="text-xs font-medium text-slate-400 uppercase tracking-wider block">Total Pendapatan</span>
-            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">Rp
-                {{ number_format($totalSales, 0, ',', '.') }}</h3>
-            <p class="text-xs text-slate-400 mt-2">Dari seluruh transaksi terbayar</p>
         </div>
 
         <!-- Stat 2: New Orders -->
@@ -44,21 +46,25 @@
             <div
                 class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/5 rounded-full group-hover:scale-125 transition-transform duration-500">
             </div>
-            <div class="flex justify-between items-start mb-4">
-                <div
-                    class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+            <div class="flex items-center justify-between gap-3 relative z-10">
+                <div class="flex items-center gap-4 min-w-0 flex-1">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0 shadow-inner">
+                        <i data-lucide="shopping-bag" class="w-7 h-7"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <span class="text-xs font-medium text-slate-400 uppercase tracking-wider block">Pesanan Baru</span>
+                        <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">{{ $newOrdersCount }}</h3>
+                        <p class="text-xs text-slate-400 mt-1">Menunggu persetujuan resep/proses</p>
+                    </div>
                 </div>
                 @if ($newOrdersCount > 0)
                     <span
-                        class="inline-flex items-center text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 px-2.5 py-1 rounded-full animate-pulse">
+                        class="inline-flex items-center text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 px-2.5 py-1 rounded-full animate-pulse self-start">
                         Baru
                     </span>
                 @endif
             </div>
-            <span class="text-xs font-medium text-slate-400 uppercase tracking-wider block">Pesanan Baru</span>
-            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{{ $newOrdersCount }}</h3>
-            <p class="text-xs text-slate-400 mt-2">Menunggu persetujuan resep/proses</p>
         </div>
 
         <!-- Stat 3: Low Stock Warning -->
@@ -67,23 +73,27 @@
             <div
                 class="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/5 rounded-full group-hover:scale-125 transition-transform duration-500">
             </div>
-            <div class="flex justify-between items-start mb-4">
-                <div
-                    class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+            <div class="flex items-center justify-between gap-3 relative z-10">
+                <div class="flex items-center gap-4 min-w-0 flex-1">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0 shadow-inner">
+                        <i data-lucide="alert-triangle" class="w-7 h-7"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <span class="text-xs font-medium text-slate-400 uppercase tracking-wider block">Stok Kritis (≤ 5)</span>
+                        <h3
+                            class="text-2xl font-extrabold {{ $lowStockCount > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-slate-900 dark:text-white' }} mt-0.5">
+                            {{ $lowStockCount }} <span class="text-xs font-normal text-slate-400">produk</span></h3>
+                        <p class="text-xs text-slate-400 mt-1">Perlu pemesanan ulang segera</p>
+                    </div>
                 </div>
                 @if ($lowStockCount > 0)
                     <span
-                        class="inline-flex items-center text-xs font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-full">
+                        class="inline-flex items-center text-xs font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-full self-start">
                         Kritis
                     </span>
                 @endif
             </div>
-            <span class="text-xs font-medium text-slate-400 uppercase tracking-wider block">Stok Kritis (≤ 5)</span>
-            <h3
-                class="text-2xl font-extrabold {{ $lowStockCount > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-slate-900 dark:text-white' }} mt-1">
-                {{ $lowStockCount }} <span class="text-xs font-normal text-slate-400">produk</span></h3>
-            <p class="text-xs text-slate-400 mt-2">Perlu pemesanan ulang segera</p>
         </div>
 
         <!-- Stat 4: Expiring Products Warning -->
@@ -92,23 +102,27 @@
             <div
                 class="absolute -right-4 -bottom-4 w-24 h-24 bg-rose-500/5 rounded-full group-hover:scale-125 transition-transform duration-500">
             </div>
-            <div class="flex justify-between items-start mb-4">
-                <div
-                    class="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 flex items-center justify-center">
-                    <i data-lucide="calendar-off" class="w-6 h-6"></i>
+            <div class="flex items-center justify-between gap-3 relative z-10">
+                <div class="flex items-center gap-4 min-w-0 flex-1">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 flex items-center justify-center flex-shrink-0 shadow-inner">
+                        <i data-lucide="calendar-off" class="w-7 h-7"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <span class="text-xs font-medium text-slate-400 uppercase tracking-wider block">Mendekati Kadaluarsa</span>
+                        <h3
+                            class="text-2xl font-extrabold {{ $expiringProductsCount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white' }} mt-0.5">
+                            {{ $expiringProductsCount }} <span class="text-xs font-normal text-slate-400">produk</span></h3>
+                        <p class="text-xs text-slate-400 mt-1">Kadaluarsa dalam waktu 60 hari</p>
+                    </div>
                 </div>
                 @if ($expiringProductsCount > 0)
                     <span
-                        class="inline-flex items-center text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-2 py-0.5 rounded-full">
+                        class="inline-flex items-center text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-2 py-0.5 rounded-full self-start">
                         Segera
                     </span>
                 @endif
             </div>
-            <span class="text-xs font-medium text-slate-400 uppercase tracking-wider block">Mendekati Kadaluarsa</span>
-            <h3
-                class="text-2xl font-extrabold {{ $expiringProductsCount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white' }} mt-1">
-                {{ $expiringProductsCount }} <span class="text-xs font-normal text-slate-400">produk</span></h3>
-            <p class="text-xs text-slate-400 mt-2">Kadaluarsa dalam waktu 60 hari</p>
         </div> --}}
     </div>
 

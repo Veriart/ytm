@@ -7,7 +7,8 @@
     <title>Yakin Tri Medika | Veterinary Pharmacy Admin Portal</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/img/ytm.jpeg" />
+    <link rel="icon" type="image/x-icon"
+        href="{{ \Illuminate\Support\Str::startsWith($fav = \App\Models\Setting::getValue('logo', '/img/ytm.jpeg'), 'http') ? $fav : asset($fav) }}" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -31,7 +32,7 @@
                             navy: '#0f172a', // Deep Navy
                             slate: '#1e293b', // Dark Slate
                             emerald: '#059669', // Emerald Green
-                            teal: '#0d9488', // Teal Green
+                            teal: '#0ec1b2ff', // Teal Green
                             accent: '#10b981', // Light Accent Green
                         }
                     }
@@ -55,15 +56,15 @@
 </head>
 
 <body
-    class="h-full text-slate-800 dark:text-slate-100 flex flex-col md:flex-row overflow-hidden bg-slate-50 dark:bg-slate-900">
+    class="h-full text-teal-800 dark:text-teal-100 flex flex-col md:flex-row overflow-hidden bg-teal-50 dark:bg-teal-900">
 
     <!-- Mobile Header/Navbar -->
     <header
         class="flex items-center justify-between px-4 py-3 bg-slate-900 text-white md:hidden border-b border-slate-800 z-30">
         <div class="flex items-center gap-3">
-            <img src="{{ \App\Models\Setting::getValue('logo', '/img/ytm.jpeg') }}" alt="Logo"
-                class="h-8 w-auto rounded" />
-            <span class="font-bold text-sm tracking-wide">Yakin Tri Medika</span>
+            <img src="{{ \Illuminate\Support\Str::startsWith($mobLogo = \App\Models\Setting::getValue('logo', '/img/ytm.jpeg'), 'http') ? $mobLogo : asset($mobLogo) }}"
+                alt="Logo" class="h-8 w-auto rounded bg-white" />
+            {{-- <span class="font-bold text-sm tracking-wide">Yakin Tri Medika</span> --}}
         </div>
         <button id="mobile-menu-btn"
             class="p-1 rounded text-slate-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
@@ -80,16 +81,15 @@
     <aside id="sidebar-menu"
         class="fixed inset-y-0 left-0 w-64 bg-slate-900 dark:bg-slate-950 text-slate-100 flex flex-col z-50 transform -translate-x-full transition-transform duration-300 md:relative md:translate-x-0 md:flex flex-shrink-0 border-r border-slate-800 dark:border-slate-800/50">
         <!-- Brand Header -->
-        <div class="h-16 flex items-center justify-between px-6 border-b border-slate-800">
+        <div class="h-16 flex items-center justify-center relative px-6 border-b border-slate-800">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-                <img src="{{ \App\Models\Setting::getValue('logo', '/img/ytm.jpeg') }}" alt="Logo"
-                    class="h-9 w-auto rounded object-contain" />
-                <span
-                    class="font-bold text-base tracking-wide bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">YTM
-                    Farmasi</span>
+                <img src="{{ \Illuminate\Support\Str::startsWith($sideLogo = \App\Models\Setting::getValue('logo', '/img/ytm.jpeg'), 'http') ? $sideLogo : asset($sideLogo) }}"
+                    alt="Logo" class="h-12 w-auto rounded object-contain bg-white" />
             </a>
-            <!-- Mobile Close Button -->
-            <button id="mobile-menu-close" class="p-1 rounded text-slate-400 hover:text-white md:hidden">
+
+            <!-- Mobile Close Button diposisikan absolute di kanan -->
+            <button id="mobile-menu-close"
+                class="absolute right-6 p-1 rounded text-slate-400 hover:text-white md:hidden">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
@@ -200,6 +200,12 @@
                         <i data-lucide="sliders"
                             class="w-5 h-5 {{ Request::routeIs('admin.setting.*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-100' }}"></i>
                         Pengaturan Toko
+                    </a>
+                    <a href="{{ route('admin.user.index') }}"
+                        class="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all {{ Request::routeIs('admin.user.*') ? 'bg-emerald-600/10 text-emerald-400 border-l-4 border-emerald-500 pl-2' : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50' }}">
+                        <i data-lucide="users"
+                            class="w-5 h-5 {{ Request::routeIs('admin.user.*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-100' }}"></i>
+                        Kelola User
                     </a>
                 </div>
             </div>

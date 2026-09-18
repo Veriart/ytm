@@ -181,19 +181,24 @@
                         </label>
                         <p class="text-slate-400 mt-1">Centang jika obat ini termasuk golongan obat keras yang mewajibkan unggah berkas resep dari dokter hewan berizin.</p>
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Target Animals (Multi-select Badges Style) -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Spesies Target Hewan</label>
+                    <label
+                        class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Spesies
+                        Target Hewan</label>
                     <div class="flex flex-wrap gap-2">
                         @php
                             $selectedAnimals = $product->target_animals ? explode(', ', $product->target_animals) : [];
                         @endphp
-                        @foreach (['Sapi', 'Kambing', 'Domba', 'Unggas', 'Anjing', 'Kucing', 'Hewan Eksotis'] as $animal)
+                        @foreach (['Anjing', 'Kucing'] as $animal)
                             <label class="cursor-pointer">
-                                <input type="checkbox" name="target_animals[]" value="{{ $animal }}" class="peer sr-only" {{ in_array($animal, old('target_animals', $selectedAnimals)) ? 'checked' : '' }} />
-                                <span class="inline-block px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 peer-checked:bg-emerald-600 peer-checked:border-emerald-600 peer-checked:text-white transition-all shadow-sm">
+                                <input type="checkbox" name="target_animals[]" value="{{ $animal }}"
+                                    class="peer sr-only"
+                                    {{ in_array($animal, old('target_animals', $selectedAnimals)) ? 'checked' : '' }} />
+                                <span
+                                    class="inline-block px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 peer-checked:bg-emerald-600 peer-checked:border-emerald-600 peer-checked:text-white transition-all shadow-sm">
                                     {{ $animal }}
                                 </span>
                             </label>
@@ -201,40 +206,63 @@
                     </div>
                 </div>
 
-                <!-- Dosage Form & Active Ingredients -->
+                {{-- <!-- Dosage Form & Active Ingredients -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label for="dosageForm" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Bentuk Sediaan</label>
-                        <select id="dosageForm" name="dosage_form" class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all">
+                        <label for="dosageForm"
+                            class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Bentuk
+                            Sediaan</label>
+                        <select id="dosageForm" name="dosage_form"
+                            class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all">
                             <option value="" disabled>Pilih Bentuk...</option>
                             @foreach (['Tablet', 'Kapsul', 'Salep', 'Injeksi / Cairan Suntik', 'Sirup / Cairan Oral', 'Drop / Tetes', 'Powder / Serbuk'] as $form)
-                                <option value="{{ $form }}" {{ old('dosage_form', $product->dosage_form) == $form ? 'selected' : '' }}>{{ $form }}</option>
+                                <option value="{{ $form }}"
+                                    {{ old('dosage_form', $product->dosage_form) == $form ? 'selected' : '' }}>
+                                    {{ $form }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div>
-                        <label for="activeIngredients" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Kandungan Bahan Aktif</label>
-                        <input type="text" id="activeIngredients" name="active_ingredients" value="{{ old('active_ingredients', $product->active_ingredients) }}" placeholder="Contoh: Oclacitinib" class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all" />
+                        <label for="activeIngredients"
+                            class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Kandungan
+                            Bahan Aktif</label>
+                        <input type="text" id="activeIngredients" name="active_ingredients"
+                            value="{{ old('active_ingredients', $product->active_ingredients) }}"
+                            placeholder="Contoh: Oclacitinib"
+                            class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all" />
                     </div>
                 </div>
 
                 <!-- Registration / BPOM / Kementan Number -->
                 <div>
-                    <label for="regNumber" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">No. Registrasi / Izin Edar Kementan/BPOM</label>
-                    <input type="text" id="regNumber" name="registration_number" value="{{ old('registration_number', $product->registration_number) }}" placeholder="Contoh: KEMENTAN RI No. D. 19085994 PKC. 1" class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all" />
+                    <label for="regNumber"
+                        class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">No.
+                        Registrasi / Izin Edar Kementan/BPOM</label>
+                    <input type="text" id="regNumber" name="registration_number"
+                        value="{{ old('registration_number', $product->registration_number) }}"
+                        placeholder="Contoh: KEMENTAN RI No. D. 19085994 PKC. 1"
+                        class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all" />
                 </div>
 
                 <!-- Batch Tracking & Expiry Date -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label for="batchNum" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nomor Batch / Lot</label>
-                        <input type="text" id="batchNum" name="batch_number" value="{{ old('batch_number', $product->batch_number) }}" placeholder="Contoh: B10294" class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all" />
+                        <label for="batchNum"
+                            class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nomor
+                            Batch / Lot</label>
+                        <input type="text" id="batchNum" name="batch_number"
+                            value="{{ old('batch_number', $product->batch_number) }}" placeholder="Contoh: B10294"
+                            class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all" />
                     </div>
 
                     <div>
-                        <label for="expiryDate" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Tanggal Kadaluarsa</label>
-                        <input type="date" id="expiryDate" name="expiry_date" value="{{ old('expiry_date', $product->expiry_date ? $product->expiry_date->format('Y-m-d') : '') }}" class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all" />
+                        <label for="expiryDate"
+                            class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Tanggal
+                            Kadaluarsa</label>
+                        <input type="date" id="expiryDate" name="expiry_date"
+                            value="{{ old('expiry_date', $product->expiry_date ? $product->expiry_date->format('Y-m-d') : '') }}"
+                            class="w-full bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:text-white transition-all" />
                     </div>
                 </div>
             </div> --}}

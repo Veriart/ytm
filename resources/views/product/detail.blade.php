@@ -76,9 +76,11 @@
                             @if ($product->stock <= 0)
                                 <span class="text-rose-600 font-bold">Stok Habis</span>
                             @elseif($product->stock <= 5)
-                                <span class="text-amber-600 font-bold">Terbatas ({{ $product->stock }} unit)</span>
+                                <span class="text-amber-600 font-bold">Terbatas</span>
+                                {{-- <span class="text-amber-600 font-bold">Terbatas ({{ $product->stock }} unit)</span> --}}
                             @else
-                                <span class="text-emerald-600 font-bold">Tersedia ({{ $product->stock }} unit)</span>
+                                <span class="text-emerald-600 font-bold">Tersedia</span>
+                                {{-- <span class="text-emerald-600 font-bold">Tersedia ({{ $product->stock }} unit)</span> --}}
                             @endif
                         </div>
 

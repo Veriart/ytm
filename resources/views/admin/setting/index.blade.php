@@ -15,6 +15,20 @@
     </div>
 @endif
 
+@if($errors->any())
+    <div class="flex flex-col gap-2 p-4 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-300 rounded-xl border border-rose-100 dark:border-rose-900/50 text-sm mt-4">
+        <div class="flex items-center gap-2 font-bold text-rose-700 dark:text-rose-400">
+            <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0"></i>
+            <span>Ada beberapa kesalahan penginputan:</span>
+        </div>
+        <ul class="list-disc list-inside mt-1 text-xs space-y-1">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <form action="{{ route('admin.setting.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6 mt-6">
     @csrf
     
@@ -29,7 +43,7 @@
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Logo Saat Ini</label>
                 <div class="p-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-xl flex items-center justify-center min-h-[100px]">
-                    <img src="{{ $logo }}" alt="Logo Preview" class="max-h-16 w-auto object-contain" />
+                    <img src="{{ \Illuminate\Support\Str::startsWith($logo, 'http') ? $logo : asset($logo) }}" alt="Logo Preview" class="max-h-16 w-auto object-contain" />
                 </div>
             </div>
 
@@ -75,7 +89,7 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Gambar Banner 1 Saat Ini</label>
                         <div class="rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 max-h-[160px]">
-                            <img src="{{ $bannerImage1 }}" alt="Banner 1 Preview" class="w-full h-36 object-cover" />
+                            <img src="{{ \Illuminate\Support\Str::startsWith($bannerImage1, 'http') ? $bannerImage1 : asset($bannerImage1) }}" alt="Banner 1 Preview" class="w-full h-36 object-cover" />
                         </div>
                     </div>
                     
@@ -107,7 +121,7 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Gambar Banner 2 Saat Ini</label>
                         <div class="rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 max-h-[160px]">
-                            <img src="{{ $bannerImage2 }}" alt="Banner 2 Preview" class="w-full h-36 object-cover" />
+                            <img src="{{ \Illuminate\Support\Str::startsWith($bannerImage2, 'http') ? $bannerImage2 : asset($bannerImage2) }}" alt="Banner 2 Preview" class="w-full h-36 object-cover" />
                         </div>
                     </div>
                     
@@ -139,7 +153,7 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Gambar Banner 3 Saat Ini</label>
                         <div class="rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 max-h-[160px]">
-                            <img src="{{ $bannerImage3 }}" alt="Banner 3 Preview" class="w-full h-36 object-cover" />
+                            <img src="{{ \Illuminate\Support\Str::startsWith($bannerImage3, 'http') ? $bannerImage3 : asset($bannerImage3) }}" alt="Banner 3 Preview" class="w-full h-36 object-cover" />
                         </div>
                     </div>
                     

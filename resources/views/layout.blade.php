@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>PT Yakin Tri Medika</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link rel="icon" type="image/jpeg" href="{{ asset('img/ytm.jpeg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ \Illuminate\Support\Str::startsWith($fav = \App\Models\Setting::getValue('logo', '/img/ytm.jpeg'), 'http') ? $fav : asset($fav) }}" />
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
@@ -162,7 +162,7 @@
             <div class="flex items-center gap-xs shrink-0 hover:scale-[1.02] transition-transform duration-200">
                 <a href="/">
                     <img alt="Yakin Tri Medika Logo" class="h-10 w-auto object-contain"
-                        src="{{ \App\Models\Setting::getValue('logo', '/img/ytm.jpeg') }}" />
+                        src="{{ \Illuminate\Support\Str::startsWith($mainLogo = \App\Models\Setting::getValue('logo', '/img/ytm.jpeg'), 'http') ? $mainLogo : asset($mainLogo) }}" />
                 </a>
             </div>
 
@@ -306,10 +306,10 @@
 
     <!-- Footer Shell -->
     <footer
-        class="w-full py-lg px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter bg-surface-container-low border-t border-outline-variant">
-        <div class="flex flex-col gap-sm">
+        class="w-full py-sm px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter bg-surface-container-low border-t border-outline-variant">
+        {{-- <div class="flex flex-col gap-sm">
             <img alt="PT Yakin Tri Medika Logo" class="h-12 w-fit grayscale opacity-70 mb-2 object-contain"
-                src="{{ \App\Models\Setting::getValue('logo', '/img/ytm.jpeg') }}" />
+                src="{{ \Illuminate\Support\Str::startsWith($footLogo = \App\Models\Setting::getValue('logo', '/img/ytm.jpeg'), 'http') ? $footLogo : asset($footLogo) }}" />
             <p class="text-caption font-caption text-on-surface-variant leading-relaxed">
                 PT Yakin Tri Medika adalah distributor resmi produk farmasi hewan dan peralatan medis terpercaya di
                 Indonesia sejak 2024.
@@ -358,8 +358,8 @@
                     class="h-8 w-12 bg-white rounded border border-outline-variant flex items-center justify-center text-[10px] font-bold text-on-surface-variant">
                     MANDIRI</div>
             </div>
-        </div>
-        <div class="md:col-span-4 pt-lg border-t border-outline-variant mt-md">
+        </div> --}}
+        <div class="md:col-span-4 py-sm">
             <p class="text-caption font-caption text-on-surface-variant text-center">
                 © 2024 Yakin Tri Medika Licensed Veterinary Pharmacy. All rights reserved.
             </p>

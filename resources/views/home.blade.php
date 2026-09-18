@@ -12,7 +12,7 @@
                 <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100 z-10"
                     data-index="0">
                     <div class="absolute inset-0 bg-cover bg-center"
-                        style="background-image: url('{{ \App\Models\Setting::getValue('banner_image_1', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBUPmxzypNMHfMiYkCk7Yr3kM65t-hMJ0O092cof5zHs0u_3B85M93vvm2RS5ILaCiGFm4QYg_tERKUFK2gDDlkLdZyktGbIAWYY2-ZHlvFpZoerJ8wdppF-Jc-92jB7_Z0MEYqvv3Dv2dxZ1OHJ8CkFxCMcaKw1yztrVQKFSNmg-Bs0h_qr_0dTzOzPLaWdBbYYPmTEJZGpn5FjJFm4105slvqkpzKeD11BiIeed7wKtMg6cEbGIl9Fg') }}')">
+                        style="background-image: url('{{ \Illuminate\Support\Str::startsWith($b1 = \App\Models\Setting::getValue('banner_image_1', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBUPmxzypNMHfMiYkCk7Yr3kM65t-hMJ0O092cof5zHs0u_3B85M93vvm2RS5ILaCiGFm4QYg_tERKUFK2gDDlkLdZyktGbIAWYY2-ZHlvFpZoerJ8wdppF-Jc-92jB7_Z0MEYqvv3Dv2dxZ1OHJ8CkFxCMcaKw1yztrVQKFSNmg-Bs0h_qr_0dTzOzPLaWdBbYYPmTEJZGpn5FjJFm4105slvqkpzKeD11BiIeed7wKtMg6cEbGIl9Fg'), 'http') ? $b1 : asset($b1) }}')">
                     </div>
                     <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent flex items-center px-10">
                         <div class="max-w-md text-white">
@@ -34,7 +34,7 @@
                 <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 z-0"
                     data-index="1">
                     <div class="absolute inset-0 bg-cover bg-center"
-                        style="background-image: url('{{ \App\Models\Setting::getValue('banner_image_2', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNxN7bLDYs8Ntog2UEH9rEQ3MqMQsWH05Nlpd8cyoxY4qqWd51rfLp6xNZKG_-fbR-d-8lDLlF1wxSF7AGb-OKlGoHDpxL-_BiUB8PsacJlwFD74W0LEMD7mkiCiM66QErUnJGAXRc8tgjPK-K7BL-yHWb6gHoPDRutAkq6fj2gRdWvaQCNTgO8whNvBGfjiTVzRNyHo51zitvWaxQWVdlcOW6MxzWJP3pax2TzhjhGGDyL_4VgOiJOg') }}')">
+                        style="background-image: url('{{ \Illuminate\Support\Str::startsWith($b2 = \App\Models\Setting::getValue('banner_image_2', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNxN7bLDYs8Ntog2UEH9rEQ3MqMQsWH05Nlpd8cyoxY4qqWd51rfLp6xNZKG_-fbR-d-8lDLlF1wxSF7AGb-OKlGoHDpxL-_BiUB8PsacJlwFD74W0LEMD7mkiCiM66QErUnJGAXRc8tgjPK-K7BL-yHWb6gHoPDRutAkq6fj2gRdWvaQCNTgO8whNvBGfjiTVzRNyHo51zitvWaxQWVdlcOW6MxzWJP3pax2TzhjhGGDyL_4VgOiJOg'), 'http') ? $b2 : asset($b2) }}')">
                     </div>
                     <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent flex items-center px-10">
                         <div class="max-w-md text-white">
@@ -55,7 +55,7 @@
                 <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 z-0"
                     data-index="2">
                     <div class="absolute inset-0 bg-cover bg-center"
-                        style="background-image: url('{{ \App\Models\Setting::getValue('banner_image_3', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAsco9lh2Q-joVp6ZTwjlxnzoeZpSMUw6vSbmQaga5WcntUTjOjDTf_Z1UszVdBkHZT-pOPZemlyOeoBeVo35Y7uXesVXGZx-9HEOOkHhPcrQB2vtIazFadN06zCbm7-vAIpKX7SRno6SfeV09dE-XxUus_9SMDpx8rTHU7aptiIMDh2bRYlyUwrqnZPQjOm8XikCEclkwYTow0duoQ6cUOND1JClnNl9-u4dP2fsvSdh-g4ExJqWuzHQ') }}')">
+                        style="background-image: url('{{ \Illuminate\Support\Str::startsWith($b3 = \App\Models\Setting::getValue('banner_image_3', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAsco9lh2Q-joVp6ZTwjlxnzoeZpSMUw6vSbmQaga5WcntUTjOjDTf_Z1UszVdBkHZT-pOPZemlyOeoBeVo35Y7uXesVXGZx-9HEOOkHhPcrQB2vtIazFadN06zCbm7-vAIpKX7SRno6SfeV09dE-XxUus_9SMDpx8rTHU7aptiIMDh2bRYlyUwrqnZPQjOm8XikCEclkwYTow0duoQ6cUOND1JClnNl9-u4dP2fsvSdh-g4ExJqWuzHQ'), 'http') ? $b3 : asset($b3) }}')">
                     </div>
                     <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent flex items-center px-10">
                         <div class="max-w-md text-white">
@@ -272,11 +272,11 @@
         </section>
 
         <!-- Bento Grid Feature Section -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {{-- <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <a href="{{ \App\Models\Setting::getValue('banner_link', '/') }}"
                 class="md:col-span-2 relative h-64 rounded-2xl overflow-hidden shadow-sm group">
                 <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                    style="background-image: url('{{ \App\Models\Setting::getValue('banner_image', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNxN7bLDYs8Ntog2UEH9rEQ3MqMQsWH05Nlpd8cyoxY4qqWd51rfLp6xNZKG_-fbR-d-8lDLlF1wxSF7AGb-OKlGoHDpxL-_BiUB8PsacJlwFD74W0LEMD7mkiCiM66QErUnJGAXRc8tgjPK-K7BL-yHWb6gHoPDRutAkq6fj2gRdWvaQCNTgO8whNvBGfjiTVzRNyHo51zitvWaxQWVdlcOW6MxzWJP3pax2TzhjhGGDyL_4VgOiJOg') }}')">
+                    style="background-image: url('{{ \Illuminate\Support\Str::startsWith($bDefault = \App\Models\Setting::getValue('banner_image', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNxN7bLDYs8Ntog2UEH9rEQ3MqMQsWH05Nlpd8cyoxY4qqWd51rfLp6xNZKG_-fbR-d-8lDLlF1wxSF7AGb-OKlGoHDpxL-_BiUB8PsacJlwFD74W0LEMD7mkiCiM66QErUnJGAXRc8tgjPK-K7BL-yHWb6gHoPDRutAkq6fj2gRdWvaQCNTgO8whNvBGfjiTVzRNyHo51zitvWaxQWVdlcOW6MxzWJP3pax2TzhjhGGDyL_4VgOiJOg'), 'http') ? $bDefault : asset($bDefault) }}')">
                 </div>
                 <div
                     class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent p-8 flex flex-col justify-end">
@@ -297,7 +297,7 @@
                     class="w-full py-3 bg-white text-primary rounded-xl font-label-md text-label-md hover:bg-surface-container-low transition-all">Mulai
                     Chat</button>
             </div>
-        </section>
+        </section> --}}
     </main>
 @endsection
 
